@@ -29,7 +29,7 @@ function deleteTouristLocation(adminId, touristLocationId) {
                 //updating
                 value.deleteFlag = 1
                 let updates = {};
-                updates['test/' + touristLocationId] = value;
+                updates['TouristLocation/' + touristLocationId] = value;
                 ref.update(updates).then(() => {
                     let object = {}
                     object[touristLocationId] = value
@@ -44,3 +44,6 @@ function deleteTouristLocation(adminId, touristLocationId) {
             })
     })
 }
+// function deleteItem(id) {
+//     dbRef.child(id).remove()
+// }

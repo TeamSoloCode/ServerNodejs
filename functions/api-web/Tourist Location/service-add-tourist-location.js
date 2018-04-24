@@ -1,13 +1,18 @@
 const firebaseRealtime = require('firebase');
 firebaseRealtime.app()
 
+let Constant = require('../../constant')
 let TouristLocation = require('../../models/tourist-location')
+let TouristLocationDetail = require('../../models/tourist-location-detail')
 /**
  * Export
  */
 let output = {
     addTouristLocation: () => {
         return addTouristLocation()
+    },
+    addTouristLocationDetail: (adminId,touristLocationId, data) => {
+        return addTouristLocationDetail(adminId,touristLocationId, data)
     }
 }
 module.exports = output
@@ -29,19 +34,50 @@ function addTouristLocation() {
         touristLocation.updatedDate = ""
         touristLocation.deleteFlag = 0
 
-        let newPostKey = ref.child('/test').push().key;
+        let newPostKey = ref.child('/TouristLocation').push().key;
         let updates = {};
-        updates['/test/' + newPostKey] = touristLocation;
+        updates['/TouristLocation/' + newPostKey] = touristLocation;
 
         
         ref.update(updates).then(() => {
-            let object = {}
-            object[id] = snap
-            resolve(object)
+            resolve(Constant.ADD_TOURIST_LOCATION_SUCCESS)
         })
         .catch((reason) => {
             reject(reason)
         });
+    })
+}
+
+/**
+ * Add new detail for tourist location
+ * @param {*} adminId 
+ * @param {*} touristLocationId 
+ * @param {*} data 
+ */
+function addTouristLocationDetail(adminId,touristLocationId, data){
+    return new Promise((resolve, reject)=>{
+        try{
+            let touristLocationDetail = new TouristLocationDetail();
+            let listDetail = JSON.parse(data)
+            let postData = []
+            for(let num in listDetail){
+                let obj = {}
+                obj[num] = listDetail[num]
+                postData.push(obj)
+            }
+            let updates = {}
+            updates['/TouristLocationDetail/' + touristLocationId] = postData;
+    
+            ref.update(updates).then(() => {
+                resolve(Constant.ADD_TOURIST_LOCATION_DETAIL_SUCCESS)
+            })
+            .catch((reason) => {
+                reject(reason)
+            });
+        }
+        catch(err){
+            throw err
+        }
     })
 }
 
@@ -52,7 +88,3 @@ function randomChar() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
 }
-
-// function deleteItem(id) {
-//     dbRef.child(id).remove()
-// }
