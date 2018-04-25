@@ -9,6 +9,9 @@ let serviceGet = require('./service-get-all-tourist-location')
 let output = {
     editTouristLocation: (adminId, touristLocationId) => {
         return editTouristLocation(adminId, touristLocationId)
+    },
+    editTouristLocationDetail:(id, data) => {
+        return editDetail(id, data)
     }
 }
 module.exports = output
@@ -40,7 +43,7 @@ function editTouristLocation(adminId, touristLocationId, updateObject) {
                 let updates = {};
                 updates['TouristLocation/' + touristLocationId] = touristLocation;
                 ref.update(updates).then(() => {
-                    resolve(Constant.EDIT_TOURIST_LOCATION_SUCCESS)
+                    resolve(Constant.success.EDIT_TOURIST_LOCATION)
                 })
                 .catch((reason) => {
                     reject(reason)
@@ -50,4 +53,36 @@ function editTouristLocation(adminId, touristLocationId, updateObject) {
                 reject(reason)
             })
     })
+}
+
+/**
+ * Edit tourist location detail
+ * @param {*} id 
+ * @param {*} data 
+ */
+function editDetail(id, data){
+    try{
+        return new Promise((resolve, reject)=>{
+            //let touristLocationDetail = new TouristLocationDetail();
+            let listDetail = JSON.parse(data)
+            let postData = []
+            for(let num in listDetail){
+                let obj = {}
+                obj[num] = listDetail[num]
+                postData.push(obj)
+            }
+            let updates = {}
+            updates['/TouristLocationDetail/' + id] = postData;
+
+            ref.update(updates).then(() => {
+                resolve(Constant.success.EDIT_TOURIST_LOCATION_DETAIL)
+            })
+            .catch((reason) => {
+                reject(reason)
+            });
+        })
+    }
+    catch(err){
+        throw err
+    }
 }

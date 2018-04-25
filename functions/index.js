@@ -23,8 +23,9 @@ firebaseRealtime.initializeApp({
 });
 
 let touristLocation = require('./api-web/Tourist Location/tourist-location');
+let rating = require('./api-web/Rating/rating')
 
-app.use('/api-web', touristLocation);
+app.use('/api-web', [touristLocation, rating]);
 
 app.listen(3000);
 //exports.app = functions.https.onRequest(app);

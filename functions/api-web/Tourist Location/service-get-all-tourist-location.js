@@ -12,6 +12,9 @@ let output = {
     },
     getTouristLocationDetailById: (id) =>{
         return getDetailById(id)
+    },
+    getAllTouristLocationNotBeDeleted: () =>{
+        return getAllTouristLocationNotBeDeleted()
     }
 }
 module.exports = output
@@ -19,28 +22,39 @@ module.exports = output
 //get firebase reference
 let ref = firebaseRealtime.database().ref();
 /**
- * 
+ * Get all tourist location
  */
 function getAllTouristLocation(){
     return new Promise((resolve, reject)=>{
         let listData = []
         ref.child('TouristLocation').once('value')
         .then(function(snap){
-            let data = Object.values(snap.val())
-            let len = Object.values(snap.val()).length;
-            let result = []
-            for(let i = 0; i < len; i++){
-                if(data[i].DeleteFlag != 1){
-                    result.push(data[1])
-                }
-            }
-            resolve(result)
+            resolve(snap)
             //console.log(Object.entries(snap.val())) //get type [key, value]
         })
         .catch((reason)=>{
             reject(reason)
         });
     })
+}
+/**
+ * Get all tourist location not be deleted
+ */
+function getAllTouristLocationNotBeDeleted(){
+    try{
+        return new Promise((resolve, reject)=>{
+            ref.child('TouristLocation').orderByChild("deleteFlag").equalTo(0).once('value')
+            .then(function(snap){
+                resolve(snap)
+            })
+            .catch((reason)=>{
+                reject(reason)
+            });
+        })
+    }
+    catch(err){
+        throw err
+    }
 }
 
 /**

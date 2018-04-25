@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 let serviceGet = require('./service-get-all-tourist-location');
 let serviceAdd = require('./service-add-tourist-location')
 let serviceDelete = require('./service-delete-tourist-location')
+let serviceEdit = require('./service-edit-tourist-location')
 
 /**
  * Get all data
@@ -24,6 +25,23 @@ router.get('/GetAllTouristLocation', (req, res) => {
    }
 });
 
+/**
+ * 
+ */
+router.get('/GetAllTouristLocationNotBeDeleted', (req, res) => {
+    try{
+        serviceGet.getAllTouristLocationNotBeDeleted()
+        .then((result)=>{
+            res.send({resultCode: 1, resultData: result})
+        })
+        .catch((reason)=>{
+            res.send({resultCode: 0, resultData: reason.toString()})
+        })
+    }
+   catch(err){
+        res.send({resultCode: -1, resultData: err.toString()})
+   }
+});
 /**
  * get by Id
  */
@@ -103,6 +121,26 @@ router.post('/AddTouristLocationDetail',(req, res)=>{
 })
 
 /**
+ * Update tourist location detail
+ */
+router.post('/UpdateTouristLocationDetail', (req, res)=>{
+    try{
+        let id = req.body.id
+        let data = req.body.data
+        serviceEdit.editTouristLocationDetail(id, data)
+        .then((result)=> {
+            res.send({resultCode: 1, resultData: result})
+        })
+        .catch((reason)=> {
+            res.send({resultCode: 0, resultData: reason.toString()})
+        })
+    }
+    catch(err){
+        res.send({resultCode: -1, resultData: err.toString()})
+    }
+})
+
+/**
  * delete tourist location
  */
 router.post('/DeleteTouristLocation',(req, res)=>{
@@ -121,4 +159,5 @@ router.post('/DeleteTouristLocation',(req, res)=>{
         res.send({resultCode: -1, resultData: err.toString()})
    }
 })
+
 module.exports = router

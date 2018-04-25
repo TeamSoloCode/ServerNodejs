@@ -40,7 +40,7 @@ function addTouristLocation() {
 
         
         ref.update(updates).then(() => {
-            resolve(Constant.ADD_TOURIST_LOCATION_SUCCESS)
+            resolve(Constant.success.ADD_TOURIST_LOCATION)
         })
         .catch((reason) => {
             reject(reason)
@@ -69,7 +69,7 @@ function addTouristLocationDetail(adminId,touristLocationId, data){
             updates['/TouristLocationDetail/' + touristLocationId] = postData;
     
             ref.update(updates).then(() => {
-                resolve(Constant.ADD_TOURIST_LOCATION_DETAIL_SUCCESS)
+                resolve(Constant.success.ADD_TOURIST_LOCATION_DETAIL)
             })
             .catch((reason) => {
                 reject(reason)
