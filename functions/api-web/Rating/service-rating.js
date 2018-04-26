@@ -2,6 +2,7 @@ const firebaseRealtime = require('firebase');
 firebaseRealtime.app()
 
 let Constant = require('../../constant')
+let serviceSyncRatingStar = require('./service-syncRatingStar')
 /**
  * Export
  */
@@ -18,6 +19,9 @@ let ref = firebaseRealtime.database().ref()
 function rating(locationId, userId, stars){
     try{
         return new Promise((resolve, reject)=>{
+            //đồng bộ đánh giá sao
+            serviceSyncRatingStar.syncRatingStar(locationId)
+
             let updates = {}
             updates[`Rating/${locationId}/${userId}`] = stars
             ref.update(updates)
@@ -37,6 +41,9 @@ function rating(locationId, userId, stars){
 function deleteRating(locationId, userId, stars){
     try{
         return new Promise((resolve, reject)=>{
+            //đồng bộ đánh giá sao
+            serviceSyncRatingStar.syncRatingStar(locationId)
+
             let key = `Rating/${locationId}/${userId}`
             ref.child(key).remove()
             .then(() => {

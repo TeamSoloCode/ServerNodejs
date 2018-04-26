@@ -22,6 +22,9 @@ firebaseRealtime.initializeApp({
     databaseURL: 'https://cloudfuntion.firebaseio.com/'
 });
 
+
+
+
 let touristLocation = require('./api-web/Tourist Location/tourist-location');
 let rating = require('./api-web/Rating/rating')
 
