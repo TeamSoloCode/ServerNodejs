@@ -1,9 +1,11 @@
-const firebaseRealtime = require('firebase');
-firebaseRealtime.app()
+const admin = require('firebase-admin')
+admin.app()
+let db = admin.firestore()
 
 let Constant = require('../../constant')
 let TouristLocation = require('../../models/tourist-location')
 let TouristLocationDetail = require('../../models/tourist-location-detail')
+let GUID = require('../../generateGUID')
 /**
  * Export
  */
@@ -17,11 +19,10 @@ let output = {
 }
 module.exports = output
 
-let ref = firebaseRealtime.database().ref();
 function addTouristLocation() {
     return new Promise((resolve, reject) => {
         let date = new Date()
-        let touristLocation = new TouristLocation();
+        let touristLocation = {};
         touristLocation.addedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br/>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}s`
         touristLocation.basicInfo = randomChar()
         touristLocation.image = 'url'
@@ -34,12 +35,11 @@ function addTouristLocation() {
         touristLocation.updatedDate = ""
         touristLocation.deleteFlag = 0
 
-        let newPostKey = ref.child('/TouristLocation').push().key;
-        let updates = {};
-        updates['/TouristLocation/' + newPostKey] = touristLocation;
-
         
-        ref.update(updates).then(() => {
+        //create firestore reference
+        let docRef = db.collection('TouristLocation');
+        docRef.add(touristLocation)
+        .then(() => {
             resolve(Constant.success.ADD_TOURIST_LOCATION)
         })
         .catch((reason) => {
@@ -57,18 +57,11 @@ function addTouristLocation() {
 function addTouristLocationDetail(adminId,touristLocationId, data){
     return new Promise((resolve, reject)=>{
         try{
-            let touristLocationDetail = new TouristLocationDetail();
             let listDetail = JSON.parse(data)
-            let postData = []
-            for(let num in listDetail){
-                let obj = {}
-                obj[num] = listDetail[num]
-                postData.push(obj)
-            }
-            let updates = {}
-            updates['/TouristLocationDetail/' + touristLocationId] = postData;
-    
-            ref.update(updates).then(() => {
+            //create firestore reference
+            let docRef = db.collection('TouristLocationDetail').doc(touristLocationId);
+            docRef.set(listDetail)
+            .then(() => {
                 resolve(Constant.success.ADD_TOURIST_LOCATION_DETAIL)
             })
             .catch((reason) => {

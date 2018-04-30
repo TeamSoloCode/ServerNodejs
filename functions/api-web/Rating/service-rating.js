@@ -1,8 +1,9 @@
-const firebaseRealtime = require('firebase');
-firebaseRealtime.app()
+const admin = require('firebase-admin')
+admin.app()
+let db = admin.firestore()
 
+let serviceSyncRatingStar = require('./service-SyncRatingStar')
 let Constant = require('../../constant')
-let serviceSyncRatingStar = require('./service-syncRatingStar')
 /**
  * Export
  */
@@ -14,23 +15,31 @@ module.exports = {
         return deleteRating(locationId, userId, stars)
     }
 }
-let ref = firebaseRealtime.database().ref()
 
 function rating(locationId, userId, stars){
     try{
         return new Promise((resolve, reject)=>{
-            //đồng bộ đánh giá sao
-            serviceSyncRatingStar.syncRatingStar(locationId)
+            if(stars > 5 || stars < 1){
+                reject("Star must be < 5 && > 1")
+                return
+            }
 
-            let updates = {}
-            updates[`Rating/${locationId}/${userId}`] = stars
-            ref.update(updates)
-            .then(() => {
+            let update = {}
+            update[userId] = stars
+            // Get a new write batch
+            var batch = db.batch();
+            // Set the value of 'NYC'
+            var nycRef = db.collection('Rating').doc(locationId);
+            batch.update(nycRef, update);
+            //commit update
+            batch.commit().then(function () {
                 resolve(Constant.success.RATING)
+                serviceSyncRatingStar.syncRatingStar(locationId)
             })
             .catch((reason) => {
                 reject(reason)
-            });
+            })
+
         })
     }
     catch(err){

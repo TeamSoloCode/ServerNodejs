@@ -39,4 +39,5 @@ router.post('/DeleteRating', (req, res) =>{
         res.send({resultCode: -1, resultData: err.toString()})
     }
 })
+
 module.exports = router

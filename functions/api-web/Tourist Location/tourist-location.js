@@ -107,7 +107,7 @@ router.post('/AddTouristLocationDetail',(req, res)=>{
         let touristLocationId = req.body.id
         let data = req.body.data
         console.log(req.body)
-        serviceAdd.addTouristLocationDetail(adminId,touristLocationId, data)
+        serviceAdd.addTouristLocationDetail(adminId, touristLocationId, data)
         .then((result)=> {
             res.send({resultCode: 1, resultData: result})
         })
@@ -145,7 +145,7 @@ router.post('/UpdateTouristLocationDetail', (req, res)=>{
  */
 router.post('/DeleteTouristLocation',(req, res)=>{
     try{
-        let touristLocationId = req.body.id
+        let touristLocationId = req.body.touristLocationId
         let adminId = 0
         serviceDelete.deleteTouristLocation(adminId, touristLocationId)
         .then((result)=>{

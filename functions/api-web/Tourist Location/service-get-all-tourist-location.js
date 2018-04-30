@@ -1,5 +1,6 @@
-const firebaseRealtime = require('firebase');
-firebaseRealtime.app()
+const admin = require('firebase-admin')
+admin.app()
+let db = admin.firestore()
 /**
  * Export
  */
@@ -19,20 +20,22 @@ let output = {
 }
 module.exports = output
 
-//get firebase reference
-let ref = firebaseRealtime.database().ref();
 /**
  * Get all tourist location
  */
 function getAllTouristLocation(){
     return new Promise((resolve, reject)=>{
-        let listData = []
-        ref.child('TouristLocation').once('value')
-        .then(function(snap){
-            resolve(snap)
-            //console.log(Object.entries(snap.val())) //get type [key, value]
+        db.collection('TouristLocation').get()
+        .then((snapshot) => {
+            let listData = []
+            snapshot.forEach((doc) => {
+                let obj = {}
+                obj[doc.id] = doc.data()
+                listData.push(obj)
+            });
+            resolve(listData)
         })
-        .catch((reason)=>{
+        .catch((reason) => {
             reject(reason)
         });
     })
@@ -43,9 +46,15 @@ function getAllTouristLocation(){
 function getAllTouristLocationNotBeDeleted(){
     try{
         return new Promise((resolve, reject)=>{
-            ref.child('TouristLocation').orderByChild("deleteFlag").equalTo(0).once('value')
-            .then(function(snap){
-                resolve(snap)
+            db.collection('TouristLocation').where('deleteFlag','==',0).get()
+            .then(function(snapshot){
+                let listData = []
+                snapshot.forEach((doc) => {
+                    let obj = {}
+                    obj[doc.id] = doc.data()
+                    listData.push(obj)
+                });
+                resolve(listData)
             })
             .catch((reason)=>{
                 reject(reason)
@@ -63,13 +72,9 @@ function getAllTouristLocationNotBeDeleted(){
  */
 function getById(id){
     return new Promise((resolve, reject)=>{
-        let result
-        ref.child(`TouristLocation/${id}`).once('value')
-        .then((snap)=>{
-            //set id be the key of the snapshot
-            let object = {}
-            object[id] = snap
-            resolve(object)
+        db.collection('TouristLocation').doc(id).get()
+        .then(function(snapshot){
+            resolve(snapshot.data())
         })
         .catch((reason)=>{
             reject(reason)
@@ -82,18 +87,12 @@ function getById(id){
  */
 function getDetailById(id){
     return new Promise((resolve, reject)=>{
-        let result
-        ref.child(`TouristLocationDetail/${id}`).once('value')
-        .then((snap)=>{
-            //set id be the key of the snapshot
-            let object = {}
-            object[id] = snap
-            resolve(object)
+        db.collection('TouristLocationDetail').doc(id).get()
+        .then(function(snapshot){
+            resolve(snapshot.data())
         })
         .catch((reason)=>{
             reject(reason)
         })
     })
 }
-
-

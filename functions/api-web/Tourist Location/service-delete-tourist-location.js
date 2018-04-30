@@ -1,7 +1,9 @@
-const firebaseRealtime = require('firebase')
-firebaseRealtime.app()
+const admin = require('firebase-admin')
+admin.app()
+let db = admin.firestore()
 
-let serviceGet = require('./service-get-all-tourist-location')
+
+let Constant = require('../../constant')
 /**
  * Export
  */
@@ -12,8 +14,6 @@ let output = {
 }
 module.exports = output
 
-let ref = firebaseRealtime.database().ref();
-
 /**
  * Delete tourist location
  * @param {*} adminId 
@@ -21,27 +21,16 @@ let ref = firebaseRealtime.database().ref();
  */
 function deleteTouristLocation(adminId, touristLocationId) {
     return new Promise((resolve, reject) => {
-        serviceGet.getTouristLocationById(touristLocationId)
-            .then((result) => {
-                let data = JSON.parse(JSON.stringify(result))
-                let value = data[touristLocationId]
-
-                //updating
-                value.deleteFlag = 1
-                let updates = {};
-                updates['TouristLocation/' + touristLocationId] = value;
-                ref.update(updates).then(() => {
-                    let object = {}
-                    object[touristLocationId] = value
-                    resolve(object)
-                })
-                .catch((reason) => {
-                    reject(reason)
-                });
-            })
-            .catch((reason) => {
-                reject(reason)
-            })
+        db.collection('TouristLocation').doc(touristLocationId)
+        .set({
+            deleteFlag: 1
+        }, { merge: true })
+        .then(()=>{
+            resolve(Constant.success.DELETE_TOURIST_LOCATION)
+        })
+        .catch((reason)=>{
+            reject(reason)
+        })
     })
 }
 // function deleteItem(id) {

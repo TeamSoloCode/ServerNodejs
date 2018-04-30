@@ -4,7 +4,8 @@ module.exports = {
         ADD_TOURIST_LOCATION_DETAIL: "Add tourist detail success",
         EDIT_TOURIST_LOCATION: "Tourist location updated",
         EDIT_TOURIST_LOCATION_DETAIL:"Update tourist location success",
-        RATING:"Rating success"
+        RATING:"Rating success",
+        DELETE_TOURIST_LOCATION:"Delete tourist location success"
     },
     fail:{
         ADD_TOURIST_LOCATION : "Add new tourist location fail",
