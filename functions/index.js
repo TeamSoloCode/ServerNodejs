@@ -24,22 +24,35 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const firebaseRealtime = require('firebase');
 firebaseRealtime.initializeApp({
     serviceAccount: serviceAccount,
-    databaseURL: 'https://cloudfuntion.firebaseio.com/',
+    apiKey: "AIzaSyBhrf_J5-lH4kIgD-cT8vOw4UbpY60tnXo",
+    authDomain: "cloudfuntion.firebaseapp.com",
+    databaseURL: "https://cloudfuntion.firebaseio.com",
+    projectId: "cloudfuntion",
+    storageBucket: "cloudfuntion.appspot.com",
+    messagingSenderId: "259860662440"
 });
+
+
 /**
  * firebase firestore
  */
-const admin = require('firebase-admin');
+let admin = require('firebase-admin');
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
+  apiKey: "AIzaSyBhrf_J5-lH4kIgD-cT8vOw4UbpY60tnXo",
+  authDomain: "cloudfuntion.firebaseapp.com",
+  databaseURL: "https://cloudfuntion.firebaseio.com",
+  projectId: "cloudfuntion",
+  storageBucket: "cloudfuntion.appspot.com",
+  messagingSenderId: "259860662440"
 });
 
+let touristLocation = require('./api/Tourist Location/tourist-location');
+let rating = require('./api/Rating/rating')
+let userHobby = require('./api/UsersHobby/hobby')
+let comment = require('./api/Comment/comment')
 
-let touristLocation = require('./api-web/Tourist Location/tourist-location');
-let rating = require('./api-web/Rating/rating')
-let userHobby = require('./api-web/UsersHobby/hobby')
-
-app.use('/api-web', [touristLocation, rating, userHobby]);
+app.use('/api-web', [touristLocation, rating, userHobby, comment]);
 
 app.listen(3000);
 //exports.app = functions.https.onRequest(app);

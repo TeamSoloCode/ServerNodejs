@@ -23,7 +23,7 @@ function rating(locationId, userId, stars){
                 reject("Star must be < 5 && > 1")
                 return
             }
-
+            
             let update = {}
             update[userId] = stars
             // Get a new write batch
