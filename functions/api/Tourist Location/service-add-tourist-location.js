@@ -5,7 +5,7 @@ let db = admin.firestore()
 let Constant = require('../../constant')
 let TouristLocation = require('../../models/tourist-location')
 let TouristLocationDetail = require('../../models/tourist-location-detail')
-let GUID = require('../../generateGUID')
+let serviceSyncAddTouristLocation = require('./service-SyncAddTouristLocation')
 /**
  * Export
  */
@@ -35,11 +35,14 @@ function addTouristLocation() {
         touristLocation.updatedDate = ""
         touristLocation.deleteFlag = 0
 
-        
+        //get key of new tourist location
+        let newKey = db.collection('TouristLocation').doc().id
         //create firestore reference
-        let docRef = db.collection('TouristLocation');
-        docRef.add(touristLocation)
+        let docRef = db.collection('TouristLocation').doc(newKey);
+        docRef.set(touristLocation)
         .then(() => {
+            serviceSyncAddTouristLocation.syncAddTouristLocation_Comment(newKey)
+            serviceSyncAddTouristLocation.syncAddTouristLocation_Rating(newKey)
             resolve(Constant.success.ADD_TOURIST_LOCATION)
         })
         .catch((reason) => {

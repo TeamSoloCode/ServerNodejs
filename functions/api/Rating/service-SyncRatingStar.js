@@ -18,7 +18,6 @@ module.exports = {
 function syncRatingStar(locationId){
     try{
         let rateTimes = 0;
-        let unsub = db.collection('Rating').onSnapshot(() => {});
         db.collection('Rating').doc(locationId).get()
         .then(docSnapshot =>{
             let ratingList = Object.values(docSnapshot.data())
