@@ -41,7 +41,7 @@ function syncAddTouristLocation_Rating(locationId){
     try{
         db.collection('Rating').doc(locationId).set({})
         .then(ok =>{
-            
+            console.log("that's good")
         })
         .catch(err =>{
             console.log(err)
