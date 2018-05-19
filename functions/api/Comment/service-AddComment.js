@@ -1,8 +1,6 @@
 const admin = require('firebase-admin')
 admin.app()
 
-let Constant = require('../../constant')
-
 module.exports = {
     addComment: (locationId, userId, comment, listImage) =>{
         return addComment(locationId, userId, comment, listImage)
@@ -35,14 +33,14 @@ function addComment(locationId, userId, comment, listImage){
                 }
             }
             
-            let newCommentRef = db.collection('Comment').doc(locationId).collection(commentKey).doc('Content')
+            let newCommentRef = db.collection('Comment').doc(locationId).collection("CommentOfLocation").doc(commentKey)
             //add comment
             newCommentRef.set(commentObj).then(function () {
-                resolve("Add comment success")
+                resolve()
             })
             .catch((reason) => {
                 reject(reason)
-            })            
+            })
         })
     }
     catch(err){

@@ -51,8 +51,9 @@ let touristLocation = require('./api/Tourist Location/tourist-location');
 let rating = require('./api/Rating/rating')
 let userHobby = require('./api/UsersHobby/hobby')
 let comment = require('./api/Comment/comment')
+let team = require('./api/Team/team')
 
-app.use('/api-web', [touristLocation, rating, userHobby, comment]);
+app.use('/api-web', [touristLocation, rating, userHobby, comment, team]);
 
 app.listen(3000);
 //exports.app = functions.https.onRequest(app);

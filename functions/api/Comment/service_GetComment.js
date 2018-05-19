@@ -1,25 +1,23 @@
 const admin = require('firebase-admin')
 admin.app()
 
-let Constant = require('../../constant')
-
 module.exports = {
-    getUserCommentById: (locationId, userId, commentId) =>{
-        return getUserCommentById(locationId, userId, commentId)
+    getUserCommentById: (locationId, commentId) =>{
+        return getUserCommentById(locationId, commentId)
     },
-    getAllCommentByLocationId: (locationId) =>{
-        return getAllCommentByLocationId(locationId)
+    getCommentByAmount: (locationId, amount)=>{
+        return getCommentByAmount(locationId, amount)
     }
 }
 
 let db = admin.firestore()
 
-function getUserCommentById(locationId, userId, commentId){
+function getUserCommentById(locationId, commentId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection('Comment').doc(locationId).collection(commentId).where('userId','==',`${userId}`).get()
+            db.collection('Comment').doc(locationId).collection('CommentOfLocation').doc(commentId).get()
             .then((snap) => {
-                resolve(snap.docs[0].data())
+                resolve(snap.data())
             })
             .catch((reason)=>{
                 reject(reason)
@@ -31,31 +29,25 @@ function getUserCommentById(locationId, userId, commentId){
     }
 }
 
-function getAllCommentByLocationId(locationId){
+function getCommentByAmount(locationId, amount){
     try{
         return new Promise((resolve, reject)=>{
             let result = []
-            let collectionLength
             let count = 0
-            db.collection('Comment').doc(locationId).getCollections()
-            .then((snap) => {
-                collectionLength = snap.length
-                snap.forEach(collection => {
-                    collection.get().then(snapshot => {
-                        result.push(snapshot.docs[0].data())
-                        count++              
-                        if(count == collectionLength)
-                            resolve(result)  
+            db.collection('Comment').doc(locationId).collection('CommentOfLocation')
+                .orderBy('updatedDate','desc').limit(amount).get()
+                .then((snap) => {
+                    snap.forEach(comment => {
+                        let commentObj = {}
+                        commentObj[comment.id] = comment.data()
+                        result.push(commentObj)
                     })
-                    .catch(reason => {
-                        reject(reason)
-                    });
-                  });
+                    resolve(result)
+                })
+                .catch(reason => {
+                    reject(reason)
+                });
             })
-            .catch((reason)=>{
-                reject(reason)
-            })
-        })
     }
     catch(err){
         throw err

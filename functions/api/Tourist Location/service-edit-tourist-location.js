@@ -1,7 +1,6 @@
 const firebaseRealtime = require('firebase')
 firebaseRealtime.app()
 
-let Constant = require('../../constant')
 let serviceGet = require('./service-get-all-tourist-location')
 /**
  * Export
@@ -43,7 +42,7 @@ function editTouristLocation(adminId, touristLocationId, updateObject) {
                 let updates = {};
                 updates['TouristLocation/' + touristLocationId] = touristLocation;
                 ref.update(updates).then(() => {
-                    resolve(Constant.success.EDIT_TOURIST_LOCATION)
+                    resolve()
                 })
                 .catch((reason) => {
                     reject(reason)
@@ -75,7 +74,7 @@ function editDetail(id, data){
             updates['/TouristLocationDetail/' + id] = postData;
 
             ref.update(updates).then(() => {
-                resolve(Constant.success.EDIT_TOURIST_LOCATION_DETAIL)
+                resolve()
             })
             .catch((reason) => {
                 reject(reason)

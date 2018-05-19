@@ -2,7 +2,6 @@ const admin = require('firebase-admin')
 admin.app()
 let db = admin.firestore()
 
-let Constant = require('../../constant')
 let TouristLocation = require('../../models/tourist-location')
 let TouristLocationDetail = require('../../models/tourist-location-detail')
 let serviceSyncAddTouristLocation = require('./service-SyncAddTouristLocation')
@@ -43,7 +42,7 @@ function addTouristLocation() {
         .then(() => {
             serviceSyncAddTouristLocation.syncAddTouristLocation_Comment(newKey)
             serviceSyncAddTouristLocation.syncAddTouristLocation_Rating(newKey)
-            resolve(Constant.success.ADD_TOURIST_LOCATION)
+            resolve()
         })
         .catch((reason) => {
             reject(reason)
@@ -57,7 +56,7 @@ function addTouristLocation() {
  * @param {*} touristLocationId 
  * @param {*} data 
  */
-function addTouristLocationDetail(adminId,touristLocationId, data){
+function addTouristLocationDetail(adminId, touristLocationId, data){
     return new Promise((resolve, reject)=>{
         try{
             let listDetail = JSON.parse(data)
@@ -65,7 +64,7 @@ function addTouristLocationDetail(adminId,touristLocationId, data){
             let docRef = db.collection('TouristLocationDetail').doc(touristLocationId);
             docRef.set(listDetail)
             .then(() => {
-                resolve(Constant.success.ADD_TOURIST_LOCATION_DETAIL)
+                resolve()
             })
             .catch((reason) => {
                 reject(reason)

@@ -1,23 +1,36 @@
 const admin = require('firebase-admin')
 admin.app()
 
-let Constant = require('../../constant')
-
 module.exports = {
-    addComment: (locationId, userId, comment, listImage) =>{
-        return addComment(locationId, userId, comment, listImage)
+    editComment: (locationId, commentId, newComment, newListImage) =>{
+        return editComment(locationId, commentId, newComment, newListImage)
     }
 }
 
 let db = admin.firestore()
 
-function editComment(locationId, userId, commentId){
+function editComment(locationId, commentId, newComment, newListImage){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection('Comment').where(`${commentId}.userId`,'==',userId).get()
+            let image = []
+            image = JSON.parse(newListImage)
+            let commentObj = {
+                comment: newComment,
+                image: newListImage,
+            }
+            if(commentObj.comment === ''){
+                delete commentObj.comment
+            }
+            if(image.length === 0){
+                delete commentObj.image
+            }
+            db.collection('Comment').doc(locationId).collection('CommentOfLocation').doc(commentId)
+            .set(commentObj, {merge: true})
             .then((snap) =>{
-                
-                snap.docs[0]
+                resolve(snap.data())
+            })
+            .catch((reason)=>{
+                reject(reason)
             })
         })
     }

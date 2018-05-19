@@ -2,8 +2,6 @@ const admin = require('firebase-admin')
 admin.app()
 let db = admin.firestore()
 
-let Constant = require('../../constant')
-
 /**
  * Export
  */

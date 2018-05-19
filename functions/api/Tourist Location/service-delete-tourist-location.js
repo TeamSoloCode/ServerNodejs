@@ -2,8 +2,6 @@ const admin = require('firebase-admin')
 admin.app()
 let db = admin.firestore()
 
-
-let Constant = require('../../constant')
 /**
  * Export
  */
@@ -26,7 +24,7 @@ function deleteTouristLocation(adminId, touristLocationId) {
             deleteFlag: 1
         }, { merge: true })
         .then(()=>{
-            resolve(Constant.success.DELETE_TOURIST_LOCATION)
+            resolve()
         })
         .catch((reason)=>{
             reject(reason)

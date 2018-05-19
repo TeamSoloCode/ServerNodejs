@@ -3,7 +3,6 @@ admin.app()
 let db = admin.firestore()
 
 let serviceSyncRatingStar = require('./service-SyncRatingStar')
-let Constant = require('../../constant')
 /**
  * Export
  */
@@ -33,7 +32,7 @@ function rating(locationId, userId, stars){
             batch.update(nycRef, update);
             //commit update
             batch.commit().then(function () {
-                resolve(Constant.success.RATING)
+                resolve()
                 serviceSyncRatingStar.syncRatingStar(locationId)
             })
             .catch((reason) => {
