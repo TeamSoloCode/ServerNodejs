@@ -20,7 +20,7 @@ function hasTeam(userId){
                     resolve(false)
                 }
                 else{
-                    resolve(true)
+                    resolve(check)
                 }
             })
             .catch((reason)=>{

@@ -28,27 +28,42 @@ function syncCreateTeam(userId, teamId){
                 });
             })
 
-            let syncCreateTeam = new Promise((resolve2, reject2)=>{
+            let syncCreateTeam = new Promise((resolve1, reject1)=>{
                 let userLocation = {};
                 userLocation[`Team/${teamId}/${userId}`] = {
                     log: 'offline',
                     lat: 'offline'
                 }
-                let setLeader = {}
-                setLeader[`Team/${teamId}/leader`] = userId
+
+                firebase.database().ref(`Team/${teamId}`).set({
+                    leader: userId
+                });
                 //sync set user has team
-                firebaseRef.update([setLeader,userLocation])
+                firebaseRef.update(userLocation)
                 .then(()=>{
-                    resolve2()
+                    resolve1()
                 })
                 .catch((reason)=>{
                     console.log(reason.toString())
-                    reject2(reason)
+                    reject1(reason)
                 });
             })
 
+            let syncTeamLeader = new Promise((resolve1, reject1)=>{
+                //the team creater is the leader of the team
+                firebase.database().ref(`Team/${teamId}`).set({
+                    leader: userId
+                })
+                .then(()=>{
+                    resolve1()
+                })
+                .catch((reason)=>{
+                    console.log(reason.toString())
+                    reject1(reason)
+                })
+            })
             //run all sync object
-            Promise.all([syncHasTeam, syncCreateTeam]).then(
+            Promise.all([syncHasTeam, syncCreateTeam,syncTeamLeader]).then(
                 ()=>{
                     resolve()
                 },

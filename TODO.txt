@@ -1,0 +1,2 @@
+1. InviteMember ko biết user đc mời có tồn tại hay không
+2. 

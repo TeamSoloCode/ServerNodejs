@@ -41,7 +41,7 @@ function createTeam(userId){
                     });
                 }
                 else{
-                    reject('Can not create team')
+                    resolve('Can not create team')
                 }
             })
         })

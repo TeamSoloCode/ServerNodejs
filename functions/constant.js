@@ -52,14 +52,12 @@ let rating ={
  * Team
  */
 let team = {
-    addMember:{
+    inviteMember:{
         success:{
-            ADD_TOURIST_LOCATION: "Add new tourist location success",
-            ADD_TOURIST_LOCATION_DETAIL: "Add tourist detail success",
+            INVITATION:"Your invitation has been sent",
         },
         fail:{
-            ADD_TOURIST_LOCATION: "Add new tourist location fail",
-            ADD_TOURIST_LOCATION_DETAIL: "Add tourist detail fail",
+            INVITATION:"Can't send your invitation"
         }
     },
     editTeamProfile:{
