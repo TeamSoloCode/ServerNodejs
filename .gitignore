@@ -1,7 +1,4 @@
 
-.firebaserc
-firebase-web.json
-firebase.json
 public/404.html
 public/index.html
 functions/node_modules

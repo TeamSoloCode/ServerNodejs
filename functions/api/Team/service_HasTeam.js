@@ -17,16 +17,15 @@ function hasTeam(userId){
             .once('value',(snap)=>{
                 let check = snap.val()
                 if(typeof check == 'undefined' || check == null){
-                    resolve(true)
+                    resolve(false)
                 }
                 else{
-                    resolve(false)
+                    resolve(true)
                 }
             })
             .catch((reason)=>{
-                reject(reason)
+                reject()
             });
-
         })
     }
     catch(err){

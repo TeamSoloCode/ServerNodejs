@@ -16,26 +16,34 @@ function createTeam(userId){
     try{
         return new Promise((resolve, reject) => {
             //kiểm tra user có đội hay chưa
-            if(hasTeam.hasTeam(userId) == false){
-                // Get a key for a new Team.
-                var newTeamKey = firebaseRef.push().key;
-                let createTeam = {};
-                createTeam['/Team/' + newTeamKey] = {
-                    leader: userId
-                };
+            hasTeam.hasTeam(userId).then((result)=>{
+                if(result == false){
+                    // Get a key for a new Team.
+                    var newTeamKey = firebaseRef.push().key;
+                    let createTeam = {};
+                    createTeam['/Leader/' + newTeamKey] = {
+                        leader: userId
+                    };
 
-                //create new team reference
-                firebaseRef.update(createTeam)
-                .then(()=>{
-                    resolve()
-                })
-                .catch((reason)=>{
-                    reject(reason)
-                });
-            }
-            else{
-                reject()
-            }
+                    //create new team reference
+                    firebaseRef.update(createTeam)
+                    .then(()=>{
+                        syncTeamModule.syncCreateTeam(userId, newTeamKey)
+                        .then(()=>{
+                            resolve()
+                        })
+                        .catch((reason)=>{
+                            reject(reason)
+                        })
+                    })
+                    .catch((reason)=>{
+                        reject(reason)
+                    });
+                }
+                else{
+                    reject('Can not create team')
+                }
+            })
         })
     }
     catch(err){
