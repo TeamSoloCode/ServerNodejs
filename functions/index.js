@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser')
-const serviceAccount = require('../firebase-web.json')
+const serviceAccount = require('./firebase-web.json')
 
 //let multer = require('');
 //let upload = multer();
@@ -53,7 +53,7 @@ let userHobby = require('./api/UsersHobby/hobby')
 let comment = require('./api/Comment/comment')
 let team = require('./api/Team/team')
 
-app.use('/api-web', [touristLocation, rating, userHobby, comment, team]);
+app.use('/api', [touristLocation, rating, userHobby, comment, team]);
 
 app.listen(3000);
 //exports.app = functions.https.onRequest(app);

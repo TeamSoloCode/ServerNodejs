@@ -30,7 +30,7 @@ function createTeam(userId){
                     .then(()=>{
                         syncTeamModule.syncCreateTeam(userId, newTeamKey)
                         .then(()=>{
-                            resolve()
+                            resolve(1)
                         })
                         .catch((reason)=>{
                             reject(reason)
@@ -41,7 +41,7 @@ function createTeam(userId){
                     });
                 }
                 else{
-                    resolve('Can not create team')
+                    resolve(0)
                 }
             })
         })

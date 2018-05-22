@@ -1,6 +1,7 @@
 let firebase = require('firebase')
 firebase.app()
 
+let isLeader = require('./service_IsLeader')
 module.exports = {
     syncCreateTeam: (userId, teamId) =>{
         return syncCreateTeam(userId, teamId)
@@ -35,9 +36,6 @@ function syncCreateTeam(userId, teamId){
                     lat: 'offline'
                 }
 
-                firebase.database().ref(`Team/${teamId}`).set({
-                    leader: userId
-                });
                 //sync set user has team
                 firebaseRef.update(userLocation)
                 .then(()=>{
@@ -87,38 +85,72 @@ function syncJoinTeam(userId, teamId){
                 //sync set user has team
                 firebaseRef.update(hasTeam)
                 .then(()=>{
-                    resolve1()
+                    resolve1(1)
                 })
                 .catch((reason)=>{
-                    reject1(reason)
+                    console.log(reason.toString())
+                    reject1(0)
                 });
             })
 
-            let syncJoinTeam = new Promise((resolve2, reject2)=>{
+            let syncJoinTeam = new Promise((resolve1, reject1)=>{
                 let userLocation = {};            
                 userLocation[`Team/${teamId}/${userId}`] = {
                     log: 'offline',
                     lat: 'offline'
                 }
                 //sync set user join team
-                firebaseRef.update([userLocation,])
+                firebaseRef.update(userLocation)
                 .then(()=>{
-                    resolve2()
+                    resolve1(1)
                 })
                 .catch((reason)=>{
-                    reject2(reason)
+                    console.log(reason.toString())
+                    reject1(0)
                 });
             })
 
             //run all sync object
             Promise.all([syncHasTeam, syncJoinTeam]).then(
-                ()=>{
+                (values)=>{
                     resolve()
                 },
                 (reason)=>{
-                    reject(reason)
+                    console.log(reason.toString())
+                    reject(0)
                 }
             )
+        })
+    }
+    catch(err){
+        throw err
+    }
+}
+
+function syncDeleteTeam(leaderId, teamId){
+    try{
+        return new Promise((resolve, reject)=>{
+            isLeader.isLeader(teamId, leaderId)
+            .then((result)=>{
+                if(result == true){
+                    let deleteFromLeader = firebaseRef.child(`Leader/${teamId}`).remove()
+                    let deleteHasTeam = new Promise((resolve, reject)=>{
+                        firebaseRef.child(`Team/${teamId}`).once('value')
+                        .then((snap)=>{
+
+                        })
+                        .catch((reason)=>{
+                            
+                        })
+                    })
+                }
+                else{
+
+                }
+            })
+            .catch(()=>{
+                return 0
+            })
         })
     }
     catch(err){

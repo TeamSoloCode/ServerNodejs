@@ -4,6 +4,14 @@ let resultCode = {
     EXCEPTION: -1,
     EMPTY_OR_NULL: 000,
     NOT_NUMBER: 001,
+    team:{
+        ALREADY_HAS_TEAM: 'TC000',
+        NOT_LEADER: 'TC001',
+        HAS_NO_TEAM: 'TC002'
+    }
+}
+let common = {
+    TRY_AGAIN: 'Something wrong happened. Please try again later'
 }
 /**
  * Tourist Location
@@ -52,6 +60,20 @@ let rating ={
  * Team
  */
 let team = {
+    joinTeam:{
+        success:{
+            JOIN_TEAM:"Join team success",
+        },
+        fail:{
+            JOIN_TEAM:"Join team fail"
+        }
+    },
+    notLeader:{
+        NOT_LEADER: "You're not the leader of this team"
+    },
+    hasTeam:{
+        ALREADY_HAS_TEAM: "You already has team"
+    },
     inviteMember:{
         success:{
             INVITATION:"Your invitation has been sent",
@@ -121,4 +143,5 @@ module.exports = {
     resultCode : resultCode,
     touristLocation : touristLocation,
     team: team,
+    common: common
 }

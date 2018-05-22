@@ -12,6 +12,7 @@ module.exports = {
     }
 }
 
+
 function inviteMember(teamId, userId, userInvitedId){
     try{
         return new Promise((resolve, reject)=>{
@@ -23,23 +24,34 @@ function inviteMember(teamId, userId, userInvitedId){
                         invitation[teamId] = {
                             leader: userId
                         }
-                        firebaseRef.child('Invitation').child(userInvitedId).set(invitation)
+                        firebaseRef.child('Invitation').child(userInvitedId).update(invitation)
                         .then(()=>{
-                            resolve()
+                            resolve(1)
                         })
                         .catch((reason)=>{
                             reject(reason)
                         })
                     }
                     else{
-                        console.log("You're not a leader of the team")
-                        resolve("You're not a leader of the team")
+                        resolve(0)
                     }
                 },
                 (reason)=>{
                     reject(reason)
                 }
             )
+        })
+    }
+    catch(err){
+        throw err
+    }
+}
+
+//TODO:
+function checkUserExistence(userInvitedId){
+    try{
+        return new Promise((resolve, reject)=>{
+            
         })
     }
     catch(err){
