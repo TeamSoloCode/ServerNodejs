@@ -19,10 +19,11 @@ function inviteMember(teamId, userId, userInvitedId){
             Promise.all([hasTeam.hasTeam(userId), isLeader.isLeader(teamId, userId)]).then(
                 (values)=>{
                     console.log(values)
-                    if(values[0] != false && values[1] == true){
+                    if(values[0] != false && values[1] != false){
                         let invitation = {}
                         invitation[teamId] = {
-                            leader: userId
+                            leader: userId,
+                            checked: 0
                         }
                         firebaseRef.child('Invitation').child(userInvitedId).update(invitation)
                         .then(()=>{

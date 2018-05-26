@@ -14,10 +14,10 @@ function declineTheInvitation(userId, teamId){
         return new Promise((resolve, reject) => {
             firebaseRef.child(`Invitation/${userId}/${teamId}`).remove()
             .then(()=>{
-                resolve()
+                resolve(1)
             })
             .catch((reason)=>{
-                reject()
+                reject(reason)
             })
         })
     }

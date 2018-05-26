@@ -10,6 +10,8 @@ let serviceInviteMember = require('./service_InviteMember')
 let serviceHasTeam = require('./service_HasTeam')
 let serviceAccept = require('./service_Accept')
 let serviceDecline = require('./service_Decline')
+let serviceDeleteTeam = require('./service_DeleteTeam')
+let serviceDeleteAllInvitation = require('./service_DeleteAllInvitation')
 
 router.post("/CreateTeam",(req, res)=>{
     try{
@@ -125,5 +127,46 @@ router.get('/DeclineTheInvitation', (req, res)=>{
     }
 })
 
+router.post('/DeleteTeam', (req, res)=>{
+    try{
+        let leaderId = req.body.leaderId
+        let teamId = req.body.teamId
+        serviceDeleteTeam.deleteTeam(leaderId, teamId)
+        .then((result)=>{
+            if(result == 1){
+                res.send(responseType(Constant.resultCode.OK, ""))
+            }
+            else if(result == -1){
+                res.send(responseType(Constant.resultCode.team.NOT_LEADER, Constant.team.notLeader.NOT_LEADER))
+            }
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/DeleteAllInvitation', (req, res)=>{
+    try{
+        let userId = req.body.userId
+        serviceDeleteAllInvitation.deleteAllInvitation(userId)
+        .then((result)=>{
+            res.send(responseType(Constant.resultCode.OK, ""))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
 
 module.exports = router

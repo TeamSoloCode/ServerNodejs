@@ -19,7 +19,7 @@ function createTeam(userId){
             hasTeam.hasTeam(userId).then((result)=>{
                 if(result == false){
                     // Get a key for a new Team.
-                    var newTeamKey = firebaseRef.push().key;
+                    let newTeamKey = firebaseRef.push().key;
                     let createTeam = {};
                     createTeam['/Leader/' + newTeamKey] = {
                         leader: userId
