@@ -7,7 +7,8 @@ let resultCode = {
     team:{
         ALREADY_HAS_TEAM: 'TC000',
         NOT_LEADER: 'TC001',
-        HAS_NO_TEAM: 'TC002'
+        HAS_NO_TEAM: 'TC002',
+        NOT_MEMBER: 'TC003'
     }
 }
 let common = {
@@ -60,6 +61,9 @@ let rating ={
  * Team
  */
 let team = {
+    notMember:{
+        NOT_MEMBER: "You're not the member of the team"
+    },
     joinTeam:{
         success:{
             JOIN_TEAM:"Join team success",

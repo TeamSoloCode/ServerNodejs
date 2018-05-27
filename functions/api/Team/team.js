@@ -11,7 +11,8 @@ let serviceHasTeam = require('./service_HasTeam')
 let serviceAccept = require('./service_Accept')
 let serviceDecline = require('./service_Decline')
 let serviceDeleteTeam = require('./service_DeleteTeam')
-let serviceDeleteAllInvitation = require('./service_DeleteAllInvitation')
+let serviceGetAllMember = require('./service_GetAllMembers')
+let serviceLeaveTeam = require('./service_LeaveTeam')
 
 router.post("/CreateTeam",(req, res)=>{
     try{
@@ -151,10 +152,35 @@ router.post('/DeleteTeam', (req, res)=>{
     }
 })
 
-router.post('/DeleteAllInvitation', (req, res)=>{
+router.get('/GetAllMember', (req, res)=>{
+    try{
+        let userId = req.query.userId
+        let teamId = req.query.teamId
+        serviceGetAllMember.getAllMember(userId, teamId)
+        .then((result)=>{
+            if(result == -1){
+                res.send(responseType(Constant.resultCode.OK, Constant.team.notMember))
+            }
+            else{
+                res.send(responseType(Constant.resultCode.OK, result))
+            }
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/LeaveTeam', (req, res)=>{
     try{
         let userId = req.body.userId
-        serviceDeleteAllInvitation.deleteAllInvitation(userId)
+        let teamId = req.body.teamId
+        serviceLeaveTeam.leaveTeam(userId, teamId)
         .then((result)=>{
             res.send(responseType(Constant.resultCode.OK, ""))
         })
