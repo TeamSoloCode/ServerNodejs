@@ -24,6 +24,7 @@ function addTouristLocation() {
         let touristLocation = {};
         touristLocation.addedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br/>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}s`
         touristLocation.basicInfo = randomChar()
+        touristLocation.address = randomChar()
         touristLocation.image = 'url'
         touristLocation.kindId = 1
         touristLocation.lat = Math.random()

@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router();
 const bodyParser = require('body-parser')
 
+let Constant = require('../../constant')
+let responseType = require('../../responseType')
+
 let serviceAddComment = require('./service-AddComment')
 let serviceGetComment = require('./service_GetComment')
 let serviceEditComment = require('./service-EditComment')

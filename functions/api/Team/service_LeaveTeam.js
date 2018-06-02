@@ -22,7 +22,7 @@ function leaveTeam(userId, teamId) {
                 })
             })
 
-            let deleteFromTeam = new Promise((resolve1, reject1)=>{
+            let deleteFromHasTeam = new Promise((resolve1, reject1)=>{
                 firebaseRef.child(`HasTeam/${userId}`).remove()
                 .then(()=>{
                     resolve1()

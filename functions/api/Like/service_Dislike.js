@@ -4,8 +4,8 @@ let db = admin.firestore()
 
 let serviceSyncLike = require('./service_SyncLike')
 module.exports = {
-    like: (userId, commentId, locationId)=>{
-        return like(userId, commentId, locationId)
+    disLike: (userId, commentId, locationId)=>{
+        return disLike(userId, commentId, locationId)
     }
 }
 /**
@@ -13,14 +13,12 @@ module.exports = {
  * @param {*} userId 
  * @param {*} commentId 
  */
-function like(userId, commentId, locationId){
+function disLike(userId, commentId, locationId){
     try{
         return new Promise((resolve, reject)=>{
             db.collection("Like").doc(locationId).collection("LikeOfLocation").doc(commentId)
                 .collection("UsersLiked").doc(userId)
-            .set({
-                deleteFlag: 1
-            })
+            .update({deleteFlag: 0})
             .then(()=>{
                 //đồng bộ số like qua comment
                 serviceSyncLike.syncLikeCount(locationId, commentId)

@@ -1,6 +1,7 @@
 const admin = require('firebase-admin')
 admin.app()
 
+let serviceSyncComment = require('./service_SyncComment')
 module.exports = {
     addComment: (locationId, userId, comment, listImage) =>{
         return addComment(locationId, userId, comment, listImage)
@@ -25,18 +26,23 @@ function addComment(locationId, userId, comment, listImage){
             let commentObj = {
                 userId: userId,
                 comment: comment,
-                updatedDate: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br/>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}s`,
+                addedDate: Firestore.FieldValue.serverTimestamp(),
                 image: [1,2,3],
-                like: {
-                    userId1: 1,
-                    userId2: 2
-                }
+                like: 0
             }
             
-            let newCommentRef = db.collection('Comment').doc(locationId).collection("CommentOfLocation").doc(commentKey)
+            let newCommentRef = db.collection('Comment').doc(locationId)
+                                    .collection("CommentOfLocation").doc(commentKey)
             //add comment
             newCommentRef.set(commentObj).then(function () {
-                resolve()
+                //create like collection
+                serviceSyncComment.syncCreateNewLike(commentKey)
+                .then(()=>{
+                    resolve()
+                })
+                .catch((reason)=>{
+                    reject(reason)
+                })
             })
             .catch((reason) => {
                 reject(reason)
