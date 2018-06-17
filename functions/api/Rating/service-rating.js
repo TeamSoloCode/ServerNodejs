@@ -19,7 +19,7 @@ function rating(locationId, userId, stars){
     try{
         return new Promise((resolve, reject)=>{
             if(stars > 5 || stars < 1){
-                reject("Star must be < 5 && > 1")
+                resolve(0)
                 return
             }
             
@@ -32,13 +32,12 @@ function rating(locationId, userId, stars){
             batch.update(nycRef, update);
             //commit update
             batch.commit().then(function () {
-                resolve()
+                resolve(1)
                 serviceSyncRatingStar.syncRatingStar(locationId)
             })
             .catch((reason) => {
                 reject(reason)
             })
-
         })
     }
     catch(err){

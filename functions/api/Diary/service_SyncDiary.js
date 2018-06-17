@@ -5,6 +5,9 @@ let db = admin.firestore()
 module.exports = {
     syncCheckPointDescription: (userId, diaryId, checkPointId)=>{
         return syncCheckPointDescription(userId, diaryId, checkPointId)
+    },
+    syncUpdateDistance: (userId, diaryId)=>{
+        return syncUpdateDistance(userId, diaryId)
     }
 }
 
@@ -24,5 +27,20 @@ function syncCheckPointDescription(userId, diaryId, checkPointId){
     }
     catch(err){
 
+    }
+}
+/**
+ * 
+ * @param {*} userId 
+ * @param {*} diaryId 
+ */
+function syncUpdateDistance(userId, diaryId){
+    try{
+        return new Promise((resolve, reject)=>{
+            db.collection('Diary').doc(userId).collection('')
+        })
+    }
+    catch(err){
+        throw err
     }
 }

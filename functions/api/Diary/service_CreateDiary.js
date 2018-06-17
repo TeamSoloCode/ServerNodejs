@@ -11,8 +11,19 @@ module.exports = {
 function createDiary(userId){
     try{
         return new Promise((resolve, reject)=>{
+            let diaryProfile = {
+                name: '',
+                description: '',
+                image:'',
+                createDate: FirebaseFirestore.FieldValue.serverTimestamp,
+                endDate: '',
+                updateDate: '',
+                distance: 0, //km
+                checkPoint: 0
+            }
+            
             let diarysNewKey = db.collection('Diary').doc().id
-            db.collection('Diary').doc(userId).collection('AllMyDiary').doc(diarysNewKey).set({})
+            db.collection('Diary').doc(userId).collection('AllMyDiary').doc(diarysNewKey).set(diaryProfile)
             .then(()=>{
                resolve()
             })

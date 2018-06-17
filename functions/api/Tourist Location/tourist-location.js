@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser')
 
+let TouristLocation = require('../../models/tourist-location')
+let TouristLocationDetail = require('../../models/tourist-location-detail')
+
 let serviceGet = require('./service-get-all-tourist-location');
 let serviceAdd = require('./service-add-tourist-location')
 let serviceDelete = require('./service-delete-tourist-location')
@@ -13,15 +16,15 @@ let serviceEdit = require('./service-edit-tourist-location')
 router.get('/GetAllTouristLocation', (req, res) => {
     try{
         serviceGet.getAllTouristLocation()
-        .then((result)=>{
-            res.send({resultCode: 1, resultData: result})
+        .then((resultData)=>{
+            res.send({resultCode: 1, resultData})
         })
         .catch((reason)=>{
-            res.send({resultCode: 0, resultData: reason.toString()})
+            res.send({resultCode: 0, resultMessage: reason.toString()})
         })
     }
    catch(err){
-        res.send({resultCode: -1, resultData: err.toString()})
+        res.send({resultCode: -1, resultMassage: err.toString()})
    }
 });
 

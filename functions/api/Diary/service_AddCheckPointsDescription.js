@@ -11,10 +11,10 @@ module.exports = {
 function addCheckPointDiscription(userId, diaryId, checkPointId, description){
     try{
         return new Promise((resolve, reject)=>{
-            //{ images:[], description: 'ahihi' }
+            //{ images:[], description: 'ahihi', createDate: '11/11/99'}
             let desObj = JSON.parse(description)
             db.collection('Diary').doc(userId).collection('Description').doc(diaryId)
-                                    .collection('CheckPointDescription').doc(checkPointId)
+                                .collection('CheckPointDescription').doc(checkPointId)
             .set(desObj)
             .then(()=>{
                resolve()

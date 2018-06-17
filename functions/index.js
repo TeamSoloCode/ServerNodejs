@@ -24,30 +24,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const firebaseRealtime = require('firebase');
 firebaseRealtime.initializeApp({
     serviceAccount: serviceAccount,
-    apiKey: "AIzaSyBhrf_J5-lH4kIgD-cT8vOw4UbpY60tnXo",
-    authDomain: "cloudfuntion.firebaseapp.com",
-    databaseURL: "https://cloudfuntion.firebaseio.com",
-    projectId: "cloudfuntion",
-    storageBucket: "cloudfuntion.appspot.com",
+    apiKey: "AIzaSyCDhqmsyxGYMOxkI1TUbDPccTrmIAJxyY0",
+    authDomain: "firebase-hwai.firebaseapp.com",
+    databaseURL: "https://firebase-hwai.firebaseio.com",
+    projectId: "firebase-hwai",
+    storageBucket: "firebase-hwai.appspot.com",
     messagingSenderId: "259860662440"
 });
-
-
 /**
  * firebase firestore
  */
 let admin = require('firebase-admin');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  apiKey: "AIzaSyBhrf_J5-lH4kIgD-cT8vOw4UbpY60tnXo",
-  authDomain: "cloudfuntion.firebaseapp.com",
-  databaseURL: "https://cloudfuntion.firebaseio.com",
-  projectId: "cloudfuntion",
-  storageBucket: "cloudfuntion.appspot.com",
+  apiKey: "AIzaSyCDhqmsyxGYMOxkI1TUbDPccTrmIAJxyY0",
+  authDomain: "firebase-hwai.firebaseapp.com",
+  databaseURL: "https://firebase-hwai.firebaseio.com",
+  projectId: "firebase-hwai",
+  storageBucket: "firebase-hwai.appspot.com",
   messagingSenderId: "259860662440"
 });
 
-let touristLocation = require('./api/Tourist Location/tourist-location');
+let touristLocation = require('./api/Tourist Location/tourist-location')
 let rating = require('./api/Rating/rating')
 let userHobby = require('./api/UsersHobby/hobby')
 let comment = require('./api/Comment/comment')
@@ -55,6 +53,5 @@ let team = require('./api/Team/team')
 
 app.use('/api', [touristLocation, rating, userHobby, comment, team]);
 
-
-app.listen(3000);
-//exports.app = functions.https.onRequest(app);
+//app.listen(3000);
+exports.app = functions.https.onRequest(app);

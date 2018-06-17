@@ -13,7 +13,6 @@ function addRoute(userId, diaryId, routes){
         return new Promise((resolve, reject)=>{
             //[{1:{log:1, lat:2}}, {2:{log:2, lat:3}}]
             let routeObj = JSON.parse(routes)
-
             db.collection('Diary').doc(userId).collection('Route').doc(diaryId).set(routes)
             .then(()=>{
                resolve()

@@ -12,7 +12,7 @@ module.exports = {
 function checkPoint(userId, diaryId, checkPoints){
     try{
         return new Promise((resolve, reject)=>{
-            // {{log:1, lat:2, discriptionId: null}}
+            // {log:1, lat:2, discriptionId: null}
             let checkPointObj = JSON.parse(checkPoints)
             let checkPointId = db.collection('Diary').doc().id
             checkPointObj['discriptionId'] = checkPointId

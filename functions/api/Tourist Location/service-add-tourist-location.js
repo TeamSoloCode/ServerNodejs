@@ -2,8 +2,6 @@ const admin = require('firebase-admin')
 admin.app()
 let db = admin.firestore()
 
-let TouristLocation = require('../../models/tourist-location')
-let TouristLocationDetail = require('../../models/tourist-location-detail')
 let serviceSyncAddTouristLocation = require('./service-SyncAddTouristLocation')
 /**
  * Export
@@ -60,6 +58,7 @@ function addTouristLocation() {
 function addTouristLocationDetail(adminId, touristLocationId, data){
     return new Promise((resolve, reject)=>{
         try{
+            //[{image: 'url', description: 'abcd'}]
             let listDetail = JSON.parse(data)
             //create firestore reference
             let docRef = db.collection('TouristLocationDetail').doc(touristLocationId);

@@ -5,10 +5,13 @@ let resultCode = {
     EMPTY_OR_NULL: 000,
     NOT_NUMBER: 001,
     team:{
-        ALREADY_HAS_TEAM: 'TC000',
-        NOT_LEADER: 'TC001',
-        HAS_NO_TEAM: 'TC002',
-        NOT_MEMBER: 'TC003'
+        ALREADY_HAS_TEAM: 'TE000',
+        NOT_LEADER: 'TE001',
+        HAS_NO_TEAM: 'TE002',
+        NOT_MEMBER: 'TE003'
+    },
+    rating:{
+        WRONG_RATE_VALUE: 'RE000'
     }
 }
 let common = {
@@ -54,7 +57,16 @@ let touristLocation = {
  * Rating
  */
 let rating ={
-
+    wrongRateValue:{
+        WRONG_RATE_VALUE: "Wrong rate value"
+    },
+    success:{
+        RATING: "Rating success! Thank you for your time.",
+        DELETE_RATING: "Delete rating success"
+    },
+    fail:{
+        
+    }
 }
 
 /**
@@ -147,5 +159,6 @@ module.exports = {
     resultCode : resultCode,
     touristLocation : touristLocation,
     team: team,
-    common: common
+    common: common,
+    rating: rating
 }

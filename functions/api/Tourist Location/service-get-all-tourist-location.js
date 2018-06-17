@@ -1,6 +1,9 @@
 const admin = require('firebase-admin')
 admin.app()
 let db = admin.firestore()
+
+let Constant = require('../../constant')
+let responseType = require('../../responseType')
 /**
  * Export
  */
@@ -29,8 +32,8 @@ function getAllTouristLocation(){
         .then((snapshot) => {
             let listData = []
             snapshot.forEach((doc) => {
-                let obj = {}
-                obj[doc.id] = doc.data()
+                let obj = doc.data()
+                obj.id  = doc.id
                 listData.push(obj)
             });
             resolve(listData)
@@ -50,8 +53,8 @@ function getAllTouristLocationNotBeDeleted(){
             .then(function(snapshot){
                 let listData = []
                 snapshot.forEach((doc) => {
-                    let obj = {}
-                    obj[doc.id] = doc.data()
+                    let obj = doc.data()
+                    obj.id  = doc.id
                     listData.push(obj)
                 });
                 resolve(listData)
@@ -89,7 +92,7 @@ function getDetailById(id){
     return new Promise((resolve, reject)=>{
         db.collection('TouristLocationDetail').doc(id).get()
         .then(function(snapshot){
-            resolve(snapshot.data())
+            resolve(snapshot.data().detail)
         })
         .catch((reason)=>{
             reject(reason)
