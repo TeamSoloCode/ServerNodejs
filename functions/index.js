@@ -25,10 +25,10 @@ const firebaseRealtime = require('firebase');
 firebaseRealtime.initializeApp({
     serviceAccount: serviceAccount,
     apiKey: "AIzaSyCDhqmsyxGYMOxkI1TUbDPccTrmIAJxyY0",
-    authDomain: "firebase-hwai.firebaseapp.com",
-    databaseURL: "https://firebase-hwai.firebaseio.com",
-    projectId: "firebase-hwai",
-    storageBucket: "firebase-hwai.appspot.com",
+    authDomain: "fir-hwai.firebaseapp.com",
+    databaseURL: "https://fir-hwai.firebaseio.com",
+    projectId: "fir-hwai",
+    storageBucket: "fir-hwai.appspot.com",
     messagingSenderId: "259860662440"
 });
 /**

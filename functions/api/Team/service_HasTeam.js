@@ -24,7 +24,7 @@ function hasTeam(userId){
                 }
             })
             .catch((reason)=>{
-                reject(0)
+                reject(reason)
             });
         })
     }

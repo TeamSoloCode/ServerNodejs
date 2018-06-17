@@ -23,9 +23,9 @@ router.get('/GetAllTouristLocation', (req, res) => {
             res.send({resultCode: 0, resultMessage: reason.toString()})
         })
     }
-   catch(err){
-        res.send({resultCode: -1, resultMassage: err.toString()})
-   }
+    catch(err){
+            res.send({resultCode: -1, resultMassage: err.toString()})
+    }
 });
 
 /**

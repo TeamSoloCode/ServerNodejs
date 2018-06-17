@@ -5,14 +5,14 @@ let syncTeamModule = require('./service_SyncTeamModule')
 let hasTeam = require('./service_HasTeam')
 
 module.exports = {
-    createTeam: (userId) =>{
-        return createTeam(userId)
+    createTeam: (userId,teamsName) =>{
+        return createTeam(userId, teamsName)
     }
 }
 //database realtime reference
 let firebaseRef = firebase.database().ref()
 
-function createTeam(userId){
+function createTeam(userId, teamsName){
     try{
         return new Promise((resolve, reject) => {
             //kiểm tra user có đội hay chưa
@@ -28,7 +28,7 @@ function createTeam(userId){
                     //create new team reference
                     firebaseRef.update(createTeam)
                     .then(()=>{
-                        syncTeamModule.syncCreateTeam(userId, newTeamKey)
+                        syncTeamModule.syncCreateTeam(userId, newTeamKey, teamsName)
                         .then(()=>{
                             resolve(1)
                         })

@@ -18,7 +18,8 @@ let serviceGetAllInvitation = require('./service_UserGetAllInvitation')
 router.post("/CreateTeam",(req, res)=>{
     try{
         let userId = req.body.userId
-        serviceCreateTeam.createTeam(userId)
+        let teamsName = req.body.teamsName
+        serviceCreateTeam.createTeam(userId, teamsName)
         .then((result)=>{
             if(result == 1){
                 res.send(responseType(Constant.resultCode.OK, Constant.team.createTeam.success.CREATE_TEAM))
@@ -29,7 +30,7 @@ router.post("/CreateTeam",(req, res)=>{
         })
         .catch((reason)=>{
             console.log(reason.toString())
-            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.team.createTeam.fail.CREATE_TEAM))
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
         })
     }
     catch(err){
@@ -63,7 +64,7 @@ router.post("/InviteMember",(req, res)=>{
     }
 })
 
-router.get('/HasTeam', (req, res)=>{
+router.post('/HasTeam', (req, res)=>{
     try{
         let userId = req.body.userId
         serviceHasTeam.hasTeam(userId)
@@ -77,7 +78,7 @@ router.get('/HasTeam', (req, res)=>{
         })
         .catch((reason)=>{
             console.log(reason.toString())
-            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.team.inviteMember.fail.INVITATION))
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
         })
     }
     catch(err){

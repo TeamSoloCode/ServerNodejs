@@ -5,10 +5,10 @@ let resultCode = {
     EMPTY_OR_NULL: 000,
     NOT_NUMBER: 001,
     team:{
-        ALREADY_HAS_TEAM: 'TE000',
-        NOT_LEADER: 'TE001',
-        HAS_NO_TEAM: 'TE002',
-        NOT_MEMBER: 'TE003'
+        ALREADY_HAS_TEAM: 111,
+        NOT_LEADER: 112,
+        HAS_NO_TEAM: 113,
+        NOT_MEMBER: 114
     },
     rating:{
         WRONG_RATE_VALUE: 'RE000'
@@ -152,7 +152,16 @@ let team = {
  * Comment
  */
 let comment = {
-
+    success:{
+        addComment:{
+            ADD_COMMENT: "Comment successful"
+        }
+    },
+    fail:{
+        addComment:{
+            ADD_COMMENT: "Comment fail"
+        }
+    }
 }
 
 module.exports = { 
@@ -160,5 +169,6 @@ module.exports = {
     touristLocation : touristLocation,
     team: team,
     common: common,
-    rating: rating
+    rating: rating,
+    comment: comment
 }

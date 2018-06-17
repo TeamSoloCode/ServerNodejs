@@ -17,14 +17,15 @@ router.post('/AddComment', (req, res) => {
         let listImage = null
         serviceAddComment.addComment(locationId, userId, comment, listImage)
         .then((result)=>{
-            res.send({resultCode: 1, resultData: result})
+            res.send(responseType(Constant.resultCode.OK, Constant.comment.success.addComment))
         })
         .catch((reason)=>{
-            res.send({resultCode: 0, resultData: reason.toString()})
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
         })
     }
     catch(err){
-        res.send({resultCode: -1, resultData: err.toString()})
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
     }
 })
 

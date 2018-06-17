@@ -3,8 +3,8 @@ firebase.app()
 
 let isLeader = require('./service_IsLeader')
 module.exports = {
-    syncCreateTeam: (userId, teamId) =>{
-        return syncCreateTeam(userId, teamId)
+    syncCreateTeam: (userId, teamId, teamsName) =>{
+        return syncCreateTeam(userId, teamId, teamsName)
     },
     syncJoinTeam: (userId, teamId) =>{
         return syncJoinTeam(userId, teamId)
@@ -16,7 +16,7 @@ module.exports = {
 //database realtime reference
 let firebaseRef = firebase.database().ref()
 
-function syncCreateTeam(userId, teamId){
+function syncCreateTeam(userId, teamId, teamsName){
     try{
         return new Promise((resolve, reject)=>{
             let newProfileKey = firebaseRef.push().key;
@@ -67,6 +67,7 @@ function syncCreateTeam(userId, teamId){
             let syncTeamProfile = new Promise((resolve1, reject1)=>{
                 //create teams profile
                 firebase.database().ref(`TeamProfile/${newProfileKey}`).set({
+                    teamsName: teamsName,
                     createdDate: firebase.database.ServerValue.TIMESTAMP,
                     createdBy: userId,
                     member: 1
@@ -80,7 +81,7 @@ function syncCreateTeam(userId, teamId){
             })
 
             //run all sync object
-            Promise.all([syncHasTeam, syncCreateTeam,syncTeamLeader]).then(
+            Promise.all([syncHasTeam, syncCreateTeam, syncTeamLeader, syncTeamProfile]).then(
                 ()=>{
                     resolve()
                 },
