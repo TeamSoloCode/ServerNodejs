@@ -53,5 +53,5 @@ let team = require('./api/Team/team')
 
 app.use('/api', [touristLocation, rating, userHobby, comment, team]);
 
-//app.listen(3000);
-exports.app = functions.https.onRequest(app);
+app.listen(3000);
+//exports.app = functions.https.onRequest(app);

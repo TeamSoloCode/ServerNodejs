@@ -1,5 +1,6 @@
 let resultCode = {
     OK: 1,
+    SUCCESSFUL: 2,
     DATABASE_EXCEPTION: 0,
     EXCEPTION: -1,
     EMPTY_OR_NULL: 000,
@@ -10,7 +11,8 @@ let resultCode = {
         HAS_NO_TEAM: 113,
         NOT_MEMBER: 114,
         EMAIL_DOES_NOT_EXIST: 115,
-        CAN_NOT_INVITE_YOURSEFT: 116
+        CAN_NOT_INVITE_YOURSEFT: 116,
+        IS_LEADER: 117
     },
     rating:{
         WRONG_RATE_VALUE: 111

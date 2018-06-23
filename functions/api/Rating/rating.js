@@ -15,7 +15,7 @@ router.post('/Rating', (req, res)=>{
         serviceRating.rating(locationId, userId, stars)
         .then((result)=>{
             if(result == 1){
-                res.send(responseType(Constant.resultCode.OK, Constant.rating.success.RATING))
+                res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.rating.success.RATING))
             }
             else if(result == 0){
                 res.send(responseType(Constant.resultCode.rating.WRONG_RATE_VALUE, Constant.rating.wrongRateValue.WRONG_RATE_VALUE))
@@ -38,7 +38,7 @@ router.post('/DeleteRating', (req, res) =>{
         let stars = req.body.stars
         serviceRating.deleteRating(locationId, userId, stars)
         .then(()=>{
-            res.send(responseType(Constant.resultCode.OK, Constant.rating.success.DELETE_RATING))
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.rating.success.DELETE_RATING))
         })
         .catch((reason)=>{
             console.log(reason.toString())

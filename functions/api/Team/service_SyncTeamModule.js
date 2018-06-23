@@ -120,8 +120,8 @@ function syncJoinTeam(userId, teamId){
             let syncJoinTeam = new Promise((resolve1, reject1)=>{
                 let userLocation = {};            
                 userLocation[`Team/${teamId}/${userId}`] = {
-                    log: 'offline',
-                    lat: 'offline'
+                    log: 999,
+                    lat: 999
                 }
                 //sync set user join team
                 firebaseRef.update(userLocation)
@@ -133,8 +133,10 @@ function syncJoinTeam(userId, teamId){
                 });
             })
 
+            let syncDeleteInvitation = firebaseRef.child(`Invitation/${userId}/${teamId}`).remove()
+
             //run all sync object
-            Promise.all([syncHasTeam, syncJoinTeam]).then(
+            Promise.all([syncHasTeam, syncJoinTeam, syncDeleteInvitation]).then(
                 (values)=>{
                     resolve()
                 },
