@@ -14,6 +14,7 @@ let serviceDeleteTeam = require('./service_DeleteTeam')
 let serviceGetAllMember = require('./service_GetAllMembers')
 let serviceLeaveTeam = require('./service_LeaveTeam')
 let serviceGetAllInvitation = require('./service_UserGetAllInvitation')
+let serviceGetInviterInfo = require('./service_GetInviterInfo')
 
 router.post("/CreateTeam",(req, res)=>{
     try{
@@ -42,12 +43,18 @@ router.post("/CreateTeam",(req, res)=>{
 router.post("/InviteMember",(req, res)=>{
     try{
         let userId = req.body.userId
-        let userInvitedId = req.body.userInvitedId
+        let userInvitedEmail = req.body.userInvitedEmail
         let teamId = req.body.teamId
-        serviceInviteMember.inviteMember(teamId, userId, userInvitedId)
+        serviceInviteMember.inviteMember(teamId, userId, userInvitedEmail)
         .then((result)=>{
             if(result == 1){
                 res.send(responseType(Constant.resultCode.OK, Constant.team.inviteMember.success.INVITATION))
+            }
+            else if(result == 2){
+                res.send(responseType(Constant.resultCode.team.EMAIL_DOES_NOT_EXIST, Constant.team.checkEmail.EMAIL_DOES_NOT_EXIST))
+            }
+            else if(result == 3){
+                res.send(responseType(Constant.resultCode.team.CAN_NOT_INVITE_YOURSEFT, Constant.team.canNotInviteYourseft.CAN_NOT_INVITE_YOURSEFT))
             }
             else if(result == 0){
                 res.send(responseType(Constant.resultCode.team.NOT_LEADER, Constant.team.notLeader.NOT_LEADER))
@@ -73,12 +80,30 @@ router.post('/HasTeam', (req, res)=>{
                 res.send(responseType(Constant.resultCode.team.HAS_NO_TEAM, ""))
             }
             else{
-                res.send(responseType(Constant.resultCode.team.ALREADY_HAS_TEAM, Constant.team.hasTeam.ALREADY_HAS_TEAM))
+                res.send(responseType(Constant.resultCode.team.ALREADY_HAS_TEAM, result))
             }
         })
         .catch((reason)=>{
             console.log(reason.toString())
             res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/GetInviterInfo', (req, res)=>{
+    try{
+        let userId = req.body.userId
+        serviceGetInviterInfo.getInviterInfo(userId)
+        .then((result)=>{
+            res.send(responseType(Constant.resultCode.OK, result))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.team.joinTeam.fail.JOIN_TEAM))
         })
     }
     catch(err){

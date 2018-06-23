@@ -66,11 +66,12 @@ function syncCreateTeam(userId, teamId, teamsName){
 
             let syncTeamProfile = new Promise((resolve1, reject1)=>{
                 //create teams profile
-                firebase.database().ref(`TeamProfile/${newProfileKey}`).set({
+                firebase.database().ref(`TeamProfile/${teamId}`).set({
                     teamsName: teamsName,
                     createdDate: firebase.database.ServerValue.TIMESTAMP,
                     createdBy: userId,
-                    member: 1
+                    member: 1,
+                    leader: userId
                 })
                 .then(()=>{
                     resolve1()

@@ -27,7 +27,6 @@ function isLeader(teamId, userId){
                         resolve(false)
                     }
                 }
-               
             })
             .catch((reason)=>{
                 reject(false)

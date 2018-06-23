@@ -8,10 +8,12 @@ let resultCode = {
         ALREADY_HAS_TEAM: 111,
         NOT_LEADER: 112,
         HAS_NO_TEAM: 113,
-        NOT_MEMBER: 114
+        NOT_MEMBER: 114,
+        EMAIL_DOES_NOT_EXIST: 115,
+        CAN_NOT_INVITE_YOURSEFT: 116
     },
     rating:{
-        WRONG_RATE_VALUE: 'RE000'
+        WRONG_RATE_VALUE: 111
     }
 }
 let common = {
@@ -73,6 +75,12 @@ let rating ={
  * Team
  */
 let team = {
+    canNotInviteYourseft:{
+        CAN_NOT_INVITE_YOURSEFT: "You can not invite yourseft !"
+    },
+    checkEmail:{
+        EMAIL_DOES_NOT_EXIST: "Users email does not exist"
+    },
     notMember:{
         NOT_MEMBER: "You're not the member of the team"
     },
