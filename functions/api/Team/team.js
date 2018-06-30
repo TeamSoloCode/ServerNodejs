@@ -233,8 +233,8 @@ router.post('/LeaveTeam', (req, res)=>{
         let userId = req.body.userId
         let teamId = req.body.teamId
         serviceLeaveTeam.leaveTeam(userId, teamId)
-        .then((result)=>{
-            res.send(responseType(Constant.resultCode.SUCCESSFUL, ""))
+        .then(()=>{
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.leaveTeam.success))
         })
         .catch((reason)=>{
             console.log(reason.toString())

@@ -19,17 +19,22 @@ let db = admin.firestore()
 function addComment(locationId, userId, comment, listImage){
     try{
         return new Promise((resolve, reject)=>{
-            let date = new Date()
+            /*
+                comment:{
+                    comment: 'abcd',
+                    listImage: [i1,i2,i3]
+                }
+            */
             //tạo key mới cho comment
             let commentKey = db.collection('Comment').doc().id
-            //comment model
-            let commentObj = {
-                userId: userId,
-                comment: comment,
-                addedDate: Firestore.FieldValue.serverTimestamp(),
-                image: [1,2,3],
-                like: 0
-            }
+            let commentObj = JSON.parse(comment)
+
+            //time comment added
+            commentObj.addedDate = Firestore.FieldValue.serverTimestamp()
+            //comment like
+            commentObj.like = 0
+            //user id
+            commentObj.userId = userId
             
             let newCommentRef = db.collection('Comment').doc(locationId)
                                     .collection("CommentOfLocation").doc(commentKey)

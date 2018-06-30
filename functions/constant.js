@@ -148,12 +148,10 @@ let team = {
     },
     leaveTeam:{
         success:{
-            DELETE_TOURIST_LOCATION:"Delete tourist location success",
-            DELETE_TOURIST_LOCATION_DETAIL:"Delete tourist location detail success"
+            LEAVE_TEAM: "You just have left your the team !!"
         },
         fail:{
-            DELETE_TOURIST_LOCATION:"Delete tourist location fail",
-            DELETE_TOURIST_LOCATION_DETAIL:"Delete tourist location detail fail"
+            LEAVE_TEAM: "You can't leave this team now !!"
         }
     }
 }

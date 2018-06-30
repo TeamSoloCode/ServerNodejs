@@ -19,7 +19,6 @@ let firebaseRef = firebase.database().ref()
 function syncCreateTeam(userId, teamId, teamsName){
     try{
         return new Promise((resolve, reject)=>{
-            let newProfileKey = firebaseRef.push().key;
             let syncHasTeam = new Promise((resolve1, reject1)=>{
                 let hasTeam = {};
                 hasTeam['/HasTeam/' + userId] = teamId
@@ -36,8 +35,8 @@ function syncCreateTeam(userId, teamId, teamsName){
             let syncCreateTeam = new Promise((resolve1, reject1)=>{
                 let userLocation = {};
                 userLocation[`Team/${teamId}/${userId}`] = {
-                    log: 'offline',
-                    lat: 'offline'
+                    log: 999,
+                    lat: 999
                 }
 
                 //sync set user has team
@@ -48,20 +47,6 @@ function syncCreateTeam(userId, teamId, teamsName){
                 .catch((reason)=>{
                     reject1(reason)
                 });
-            })
-
-            let syncTeamLeader = new Promise((resolve1, reject1)=>{
-                //the team creater is the leader of the team
-                firebase.database().ref(`Team/${teamId}`).set({
-                    leader: userId,
-                    profileId: newProfileKey
-                })
-                .then(()=>{
-                    resolve1()
-                })
-                .catch((reason)=>{
-                    reject1(reason)
-                })
             })
 
             let syncTeamProfile = new Promise((resolve1, reject1)=>{
@@ -82,7 +67,7 @@ function syncCreateTeam(userId, teamId, teamsName){
             })
 
             //run all sync object
-            Promise.all([syncHasTeam, syncCreateTeam, syncTeamLeader, syncTeamProfile]).then(
+            Promise.all([syncHasTeam, syncCreateTeam, syncTeamProfile]).then(
                 ()=>{
                     resolve()
                 },
