@@ -27,9 +27,9 @@ firebaseRealtime.initializeApp({
     apiKey: "AIzaSyCDhqmsyxGYMOxkI1TUbDPccTrmIAJxyY0",
     authDomain: "fir-hwai.firebaseapp.com",
     databaseURL: "https://fir-hwai.firebaseio.com",
-    projectId: "fir-hwai",
-    storageBucket: "fir-hwai.appspot.com",
-    messagingSenderId: "259860662440"
+    projectId: "firebase-hwai",
+    storageBucket: "firebase-hwai.appspot.com",
+    messagingSenderId: "456694018002"
 });
 /**
  * firebase firestore
@@ -38,11 +38,11 @@ let admin = require('firebase-admin');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   apiKey: "AIzaSyCDhqmsyxGYMOxkI1TUbDPccTrmIAJxyY0",
-  authDomain: "firebase-hwai.firebaseapp.com",
-  databaseURL: "https://firebase-hwai.firebaseio.com",
+  authDomain: "fir-hwai.firebaseapp.com",
+  databaseURL: "https://fir-hwai.firebaseio.com",
   projectId: "firebase-hwai",
   storageBucket: "firebase-hwai.appspot.com",
-  messagingSenderId: "259860662440"
+  messagingSenderId: "456694018002"
 });
 
 let touristLocation = require('./api/Tourist Location/tourist-location')
@@ -50,8 +50,9 @@ let rating = require('./api/Rating/rating')
 let userHobby = require('./api/UsersHobby/hobby')
 let comment = require('./api/Comment/comment')
 let team = require('./api/Team/team')
+let diary = require('./api/Diary/diary')
 
-app.use('/api', [touristLocation, rating, userHobby, comment, team]);
+app.use('/api', [touristLocation, rating, userHobby, comment, team, diary]);
 
-//app.listen(3000);
-exports.app = functions.https.onRequest(app);
+app.listen(3000);
+//exports.app = functions.https.onRequest(app);

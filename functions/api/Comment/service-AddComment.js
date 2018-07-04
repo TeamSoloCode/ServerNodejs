@@ -25,12 +25,13 @@ function addComment(locationId, userId, comment, listImage){
                     listImage: [i1,i2,i3]
                 }
             */
+           let date = new Date()
             //tạo key mới cho comment
             let commentKey = db.collection('Comment').doc().id
             let commentObj = JSON.parse(comment)
 
             //time comment added
-            commentObj.addedDate = Firestore.FieldValue.serverTimestamp()
+            commentObj.addedDate = date.getTime()
             //comment like
             commentObj.like = 0
             //user id

@@ -13,7 +13,6 @@ let serviceDecline = require('./service_Decline')
 let serviceDeleteTeam = require('./service_DeleteTeam')
 let serviceGetAllMember = require('./service_GetAllMembers')
 let serviceLeaveTeam = require('./service_LeaveTeam')
-let serviceGetAllInvitation = require('./service_UserGetAllInvitation')
 let serviceGetInviterInfo = require('./service_GetInviterInfo')
 let serviceIsLeader = require('./service_IsLeader')
 
@@ -235,24 +234,6 @@ router.post('/LeaveTeam', (req, res)=>{
         serviceLeaveTeam.leaveTeam(userId, teamId)
         .then(()=>{
             res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.leaveTeam.success))
-        })
-        .catch((reason)=>{
-            console.log(reason.toString())
-            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
-        })
-    }
-    catch(err){
-        console.log(err.toString())
-        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
-    }
-})
-
-router.get('/GetAllInvitation', (req, res)=>{
-    try{
-        let userId = req.query.userId
-        serviceGetAllInvitation.getAllInvitation(userId)
-        .then((result)=>{
-            res.send(responseType(Constant.resultCode.OK, result))
         })
         .catch((reason)=>{
             console.log(reason.toString())

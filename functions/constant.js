@@ -73,6 +73,12 @@ let rating ={
     }
 }
 
+let diary = {
+    createDiary:{
+        SUCCESSFUL: "Create diary successful!!!"
+    }
+}
+
 /**
  * Team
  */
@@ -178,5 +184,6 @@ module.exports = {
     team: team,
     common: common,
     rating: rating,
-    comment: comment
+    comment: comment,
+    diary: diary
 }

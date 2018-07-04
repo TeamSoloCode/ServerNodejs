@@ -11,17 +11,36 @@ let serviceAddCheckPoint = require('./service_AddCheckPoint')
 let serviceAddCheckPointDescription = require('./service_AddCheckPointsDescription')
 let serviceDeleteCheckPoint = require('./service_DeleteCheckPoint')
 let serviceUpdateProfile = require('./service_UpdateProfileDiary')
+let serviceGetAllMyDiary = require('./service_GetAllDiary')
 
 router.post('/CreateDiary', (req, res)=>{
     try{
         let userId = req.body.userId
         serviceCreateDiary.createDiary(userId)
         .then(()=>{
-            res.send(responseType(Constant.resultCode.OK, ""))
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.diary.createDiary.SUCCESSFUL))
         })
         .catch((reason)=>{
             console.log(reason.toString())
-            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.team.inviteMember.fail.INVITATION))
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/GetAllMyDiary', (req, res)=>{
+    try{
+        let userId = req.body.userId
+        serviceGetAllMyDiary.getAllMyDiary(userId)
+        .then((resultData)=>{
+            res.send(responseType(Constant.resultCode.OK, resultData))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
         })
     }
     catch(err){
