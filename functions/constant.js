@@ -21,6 +21,8 @@ let resultCode = {
 let common = {
     TRY_AGAIN: 'Something wrong happened. Please try again later'
 }
+
+
 /**
  * Tourist Location
  */
@@ -76,6 +78,9 @@ let rating ={
 let diary = {
     createDiary:{
         SUCCESSFUL: "Create diary successful!!!"
+    },
+    addCheckPoint:{
+        SUCCESSFUL: "Add check point successful!!!"
     }
 }
 
@@ -178,6 +183,19 @@ let comment = {
     }
 }
 
+let userProfile ={
+    success:{
+        update:{
+            UPDATE_PROFILE: "Update profile successful!!"
+        }
+    },
+    fail:{
+        addComment:{
+            UPDATE_PROFILE: "Update profile fail"
+        }
+    }
+}
+
 module.exports = { 
     resultCode : resultCode,
     touristLocation : touristLocation,
@@ -185,5 +203,6 @@ module.exports = {
     common: common,
     rating: rating,
     comment: comment,
-    diary: diary
+    diary: diary,
+    userProfile: userProfile
 }

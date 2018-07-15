@@ -51,8 +51,9 @@ let userHobby = require('./api/UsersHobby/hobby')
 let comment = require('./api/Comment/comment')
 let team = require('./api/Team/team')
 let diary = require('./api/Diary/diary')
+let userProfile = require('./api/User/user')
 
-app.use('/api', [touristLocation, rating, userHobby, comment, team, diary]);
+app.use('/api', [touristLocation, rating, userHobby, comment, team, diary, userProfile]);
 
-app.listen(3000);
-//exports.app = functions.https.onRequest(app);
+//app.listen(3000);
+exports.app = functions.https.onRequest(app);

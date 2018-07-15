@@ -18,16 +18,18 @@ function getAllMyDiary(userId){
                 let length = diarySnapshot.docs.length
                 let count = 0
                 let listDiary = []
+
+                if(diarySnapshot.docs.length == 0){
+                    resolved(listDiary)
+                }
+
                 diarySnapshot.forEach( cSnap =>{
-                    listDiary.push({
-                        name:cSnap.data().name,
-                        image: cSnap.data().image,
-                        createDate: cSnap.data().createDate,
-                        discription: cSnap.data().description,
-                    })
+                    let diary = cSnap.data()
+                    diary.id = cSnap.id
+
+                    listDiary.push(diary)
                     count++
                     if(count == length){
-                        console.log(listDiary)
                         resolved(listDiary)
                     }
                 })

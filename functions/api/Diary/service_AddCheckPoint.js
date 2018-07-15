@@ -4,20 +4,22 @@ let db = admin.firestore()
 
 
 module.exports = {
-    checkPoint: (userId, diaryId, checkPoints)=>{
-        return checkPoint(userId, diaryId, checkPoints)
+    checkPoint: (userId, diaryId, data)=>{
+        return checkPoint(userId, diaryId, data)
     }
 }
 
-function checkPoint(userId, diaryId, checkPoints){
+function checkPoint(userId, diaryId, data){
     try{
         return new Promise((resolve, reject)=>{
-            // {log:1, lat:2, discriptionId: null}
-            let checkPointObj = JSON.parse(checkPoints)
+            // {log:1, lat:2, images:[], description: 'ahihi', createDate: '11/11/99'}
+            let checkPointObj = JSON.parse(data)
+            //xóa id lúc gửi từ client lên vì không cần thiết
+            delete checkPointObj.id
+
             let checkPointId = db.collection('Diary').doc().id
-            checkPointObj['discriptionId'] = checkPointId
             db.collection('Diary').doc(userId).collection('CheckPoint').doc(diaryId)
-                                                .collection('Points').doc(checkPointId)
+                                                .collection('Detail').doc(checkPointId)
             .set(checkPointObj)
             .then(()=>{
                 resolve()
