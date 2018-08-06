@@ -16,6 +16,9 @@ let resultCode = {
     },
     rating:{
         WRONG_RATE_VALUE: 111
+    },
+    sos:{
+        HAVE_TO_WAIT: 311
     }
 }
 let common = {
@@ -75,12 +78,28 @@ let rating ={
     }
 }
 
+/**
+ * diary
+ */
 let diary = {
     createDiary:{
         SUCCESSFUL: "Create diary successful!!!"
     },
     addCheckPoint:{
         SUCCESSFUL: "Add check point successful!!!"
+    },
+    update:{
+        SUCCESSFUL: "Update check point successful!!!"
+    }
+}
+
+/**
+ * Ping
+ */
+let ping = {
+    ping:{
+        SUCCESSFUL: "Sent ping to your team!",
+        WAIT: 'You have to wait for 5 minutes!!'
     }
 }
 
@@ -130,14 +149,7 @@ let team = {
         }
     },
     removeMember:{
-        success:{
-            DELETE_TOURIST_LOCATION:"Delete tourist location success",
-            DELETE_TOURIST_LOCATION_DETAIL:"Delete tourist location detail success"
-        },
-        fail:{
-            DELETE_TOURIST_LOCATION:"Delete tourist location fail",
-            DELETE_TOURIST_LOCATION_DETAIL:"Delete tourist location detail fail"
-        }
+        REMOVE_MEMBER: "Remove member successful!!"
     },
     createTeam:{
         success:{
@@ -196,6 +208,7 @@ let userProfile ={
     }
 }
 
+
 module.exports = { 
     resultCode : resultCode,
     touristLocation : touristLocation,
@@ -204,5 +217,6 @@ module.exports = {
     rating: rating,
     comment: comment,
     diary: diary,
-    userProfile: userProfile
+    userProfile: userProfile,
+    ping: ping
 }

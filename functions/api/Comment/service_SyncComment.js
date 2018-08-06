@@ -16,7 +16,8 @@ let db = admin.firestore()
 function syncCreateNewLike(locationId, commentId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection("Like").doc(locationId).collection("LikeOfLocation").doc(commentId).set({})
+            db.collection("Like").doc(locationId).collection("LikeOfComment").doc(commentId)
+            .set({})
             .then(()=>{
                 resolve()
             })

@@ -16,9 +16,9 @@ module.exports = {
 function disLike(userId, commentId, locationId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection("Like").doc(locationId).collection("LikeOfLocation").doc(commentId)
+            db.collection("Like").doc(locationId).collection("LikeOfComment").doc(commentId)
                 .collection("UsersLiked").doc(userId)
-            .update({deleteFlag: 0})
+            .update({deleteFlag: 1})
             .then(()=>{
                 //đồng bộ số like qua comment
                 serviceSyncLike.syncLikeCount(locationId, commentId)

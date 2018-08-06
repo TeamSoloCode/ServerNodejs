@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser')
 
-let TouristLocation = require('../../models/tourist-location')
-let TouristLocationDetail = require('../../models/tourist-location-detail')
+let Constant = require('../../constant')
+let responseType = require('../../responseType')
 
 let serviceGet = require('./service-get-all-tourist-location');
-let serviceAdd = require('./service-add-tourist-location')
+let serviceAddTest = require('./service-add-tourist-location-test')
 let serviceDelete = require('./service-delete-tourist-location')
 let serviceEdit = require('./service-edit-tourist-location')
+let serviceAddTouristLocation = require('./service_AddTouristLocation')
 
 /**
  * Get all data
@@ -85,9 +86,9 @@ router.get('/GetTouristLocationDetailById', (req, res)=>{
 /**
  * add new tourist location
  */
-router.post('/AddNewTouristLocation',(req, res)=>{
+router.post('/AddNewTouristLocationTest',(req, res)=>{
     try{
-        serviceAdd.addTouristLocation()
+        serviceAddTest.addTouristLocationTest()
         .then((result)=>{
             res.send({resultCode: 1, resultData: result})
         })
@@ -100,6 +101,25 @@ router.post('/AddNewTouristLocation',(req, res)=>{
    }
 })
 
+router.post('/AddNewTouristLocation',(req, res)=>{
+    try{
+        let adminId = req.body.adminId
+        let data = req.body.data
+        serviceAddTouristLocation.addTouristLocation(adminId, data)
+        .then(()=>{
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.touristLocation.add.success.ADD_TOURIST_LOCATION))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
 /**
  * add tourist loaction detail
  */
@@ -109,8 +129,7 @@ router.post('/AddTouristLocationDetail',(req, res)=>{
         let adminId = null;
         let touristLocationId = req.body.id
         let data = req.body.data
-        console.log(req.body)
-        serviceAdd.addTouristLocationDetail(adminId, touristLocationId, data)
+        serviceAddTest.addTouristLocationDetail(adminId, touristLocationId, data)
         .then((result)=> {
             res.send({resultCode: 1, resultData: result})
         })

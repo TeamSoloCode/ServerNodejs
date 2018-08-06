@@ -14,10 +14,9 @@ router.post('/AddComment', (req, res) => {
         let userId = req.body.userId
         let locationId = req.body.locationId
         let comment = req.body.comment
-        let listImage = null
-        serviceAddComment.addComment(locationId, userId, comment, listImage)
-        .then((result)=>{
-            res.send(responseType(Constant.resultCode.OK, Constant.comment.success.addComment))
+        serviceAddComment.addComment(locationId, userId, comment)
+        .then(()=>{
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.comment.success.addComment.ADD_COMMENT))
         })
         .catch((reason)=>{
             console.log(reason.toString())
@@ -53,11 +52,12 @@ router.post('/UpdateComment', (req, res) => {
     }
 })
 
-router.get('/GetUserCommentById', (req, res)=>{
+router.post('/GetAllCommentOfLocation', (req, res)=>{
     try{
-        let locationId = req.query.locationId
-        let commentId = req.query.commentId
-        serviceGetComment.getUserCommentById(locationId, commentId)
+        let locationId = req.body.locationId
+        let userIdGetComment = req.body.userIdGetComment
+        let commentId = req.body.commentId
+        serviceGetComment.getAllCommentOfLocation(locationId, userIdGetComment, commentId)
         .then((result)=>{
             res.send({resultCode: 1, resultData: result})
         })

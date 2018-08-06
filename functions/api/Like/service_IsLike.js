@@ -11,8 +11,8 @@ module.exports = {
 function isLiked(userId, commentId, locationId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection('Comment').doc(locationId).collection('CommentOfLocation')
-            .where(`like.${userId}`,'==','1').get()
+            db.collection("Like").doc(locationId).collection("LikeOfComment").doc(commentId)
+                .collection("UsersLiked").doc(userId).get()
             .then((snap)=>{
                 let check = snap.docs[0]
                 if(typeof check == 'undefined' || check == null){

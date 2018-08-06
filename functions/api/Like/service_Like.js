@@ -16,10 +16,10 @@ module.exports = {
 function like(userId, commentId, locationId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection("Like").doc(locationId).collection("LikeOfLocation").doc(commentId)
+            db.collection("Like").doc(locationId).collection("LikeOfComment").doc(commentId)
                 .collection("UsersLiked").doc(userId)
             .set({
-                deleteFlag: 1
+                deleteFlag: 0
             })
             .then(()=>{
                 //đồng bộ số like qua comment

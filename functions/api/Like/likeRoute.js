@@ -14,8 +14,8 @@ router.post('/Like', (req, res)=>{
         let commentId = req.body.commentId
         let locationId = req.body.locationId
         serviceLike.like(userId, commentId, locationId)
-        .then((result)=>{
-            res.send(responseType(Constant.resultCode.OK, ""))
+        .then(()=>{
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, ""))
         })
         .catch((reason)=>{
             console.log(reason.toString())

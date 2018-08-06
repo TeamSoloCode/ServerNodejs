@@ -8,7 +8,7 @@ let responseType = require('../../responseType')
 let serviceCreateDiary = require('./service_CreateDiary')
 let serviceAddRoute = require('./service_AddRoute')
 let serviceAddCheckPoint = require('./service_AddCheckPoint')
-let serviceAddCheckPointDescription = require('./service_AddCheckPointsDescription')
+let serviceUpdateCheckPoint = require('./service_UpdateCheckPoint')
 let serviceDeleteCheckPoint = require('./service_DeleteCheckPoint')
 let serviceUpdateProfile = require('./service_UpdateProfileDiary')
 let serviceGetAllMyDiary = require('./service_GetAllDiary')
@@ -91,15 +91,14 @@ router.post('/AddCheckPoint', (req, res)=>{
     }
 })
 
-router.post('/AddCheckPointDescription', (req, res)=>{
+router.post('/UpdateCheckPoint', (req, res)=>{
     try{
         let userId = req.body.userId
         let diaryId = req.body.diaryId
-        let checkPointId = req.body.checkPointId
         let data = req.body.data
-        serviceAddCheckPointDescription.addCheckPointDiscription(userId, diaryId, checkPointId, data)
+        serviceUpdateCheckPoint.updateCheckPoint(userId, diaryId, data)
         .then(()=>{
-            res.send(responseType(Constant.resultCode.OK, ""))
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.diary.update.SUCCESSFUL))
         })
         .catch((reason)=>{
             console.log(reason.toString())

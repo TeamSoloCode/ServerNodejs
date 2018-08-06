@@ -7,16 +7,17 @@ let serviceSyncAddTouristLocation = require('./service-SyncAddTouristLocation')
  * Export
  */
 let output = {
-    addTouristLocation: () => {
-        return addTouristLocation()
+    addTouristLocationTest: () => {
+        return addTouristLocationTest()
     },
     addTouristLocationDetail: (adminId,touristLocationId, data) => {
         return addTouristLocationDetail(adminId,touristLocationId, data)
     }
 }
+
 module.exports = output
 
-function addTouristLocation() {
+function addTouristLocationTest() {
     return new Promise((resolve, reject) => {
         let date = new Date()
         let touristLocation = {};
@@ -56,8 +57,9 @@ function addTouristLocation() {
  * @param {*} data 
  */
 function addTouristLocationDetail(adminId, touristLocationId, data){
-    return new Promise((resolve, reject)=>{
-        try{
+    try{
+        return new Promise((resolve, reject)=>{
+
             //[{image: 'url', description: 'abcd'}]
             let listDetail = JSON.parse(data)
             //create firestore reference
@@ -69,11 +71,12 @@ function addTouristLocationDetail(adminId, touristLocationId, data){
             .catch((reason) => {
                 reject(reason)
             });
-        }
-        catch(err){
-            throw err
-        }
-    })
+
+        })
+    }
+    catch(err){
+        throw err
+    }
 }
 
 function randomChar() {

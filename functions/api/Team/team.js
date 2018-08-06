@@ -15,6 +15,7 @@ let serviceGetAllMember = require('./service_GetAllMembers')
 let serviceLeaveTeam = require('./service_LeaveTeam')
 let serviceGetInviterInfo = require('./service_GetInviterInfo')
 let serviceIsLeader = require('./service_IsLeader')
+let serviceRemoveMember = require('./service_RemoveMember')
 
 router.post("/CreateTeam",(req, res)=>{
     try{
@@ -233,7 +234,7 @@ router.post('/LeaveTeam', (req, res)=>{
         let teamId = req.body.teamId
         serviceLeaveTeam.leaveTeam(userId, teamId)
         .then(()=>{
-            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.leaveTeam.success))
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.leaveTeam.success.LEAVE_TEAM))
         })
         .catch((reason)=>{
             console.log(reason.toString())
@@ -246,4 +247,22 @@ router.post('/LeaveTeam', (req, res)=>{
     }
 })
 
+router.post('/RemoveMember', (req, res)=>{
+    try{
+        let userId = req.body.userId
+        let teamId = req.body.teamId
+        serviceRemoveMember.removeMember(userId, teamId)
+        .then(()=>{
+            res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.removeMember.REMOVE_MEMBER))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
 module.exports = router

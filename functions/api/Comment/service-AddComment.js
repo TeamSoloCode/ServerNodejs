@@ -1,22 +1,27 @@
 const admin = require('firebase-admin')
 admin.app()
 
+let firebase = require('firebase')
+firebase.app()
+
 let serviceSyncComment = require('./service_SyncComment')
+
 module.exports = {
-    addComment: (locationId, userId, comment, listImage) =>{
-        return addComment(locationId, userId, comment, listImage)
+    addComment: (locationId, userId, comment) =>{
+        return addCommentRealtime(locationId, userId, comment)
     }
 }
 
 let db = admin.firestore()
+let realtimeRef = firebase.database().ref()
+
 /**
  * Comment
  * @param {*} locationId 
  * @param {*} userId 
  * @param {*} comment 
- * @param {*} listImage 
  */
-function addComment(locationId, userId, comment, listImage){
+function addCommentRealtime(locationId, userId, comment){
     try{
         return new Promise((resolve, reject)=>{
             /*
@@ -25,24 +30,31 @@ function addComment(locationId, userId, comment, listImage){
                     listImage: [i1,i2,i3]
                 }
             */
-           let date = new Date()
-            //tạo key mới cho comment
-            let commentKey = db.collection('Comment').doc().id
-            let commentObj = JSON.parse(comment)
+                let date = new Date()
+                //tạo key mới cho comment
+                let commentKey = realtimeRef.push().key
 
-            //time comment added
-            commentObj.addedDate = date.getTime()
-            //comment like
-            commentObj.like = 0
-            //user id
-            commentObj.userId = userId
-            
-            let newCommentRef = db.collection('Comment').doc(locationId)
-                                    .collection("CommentOfLocation").doc(commentKey)
-            //add comment
-            newCommentRef.set(commentObj).then(function () {
-                //create like collection
-                serviceSyncComment.syncCreateNewLike(commentKey)
+                let commentObj = JSON.parse(comment)
+
+                //time comment added
+                commentObj.addedDate = date.getTime()
+                //comment like
+                commentObj.like = 0
+                //user id
+                commentObj.userId = userId
+
+                //delete flag
+                commentObj.deleteFlag = 0
+
+                //add comment to firebase realtime
+                let addToFirebaseReatime = realtimeRef.child(`Comment/${locationId}/${commentKey}`).set(true)
+
+                //backup data to firestore
+                let addToFirestore = db.collection('Comment').doc(locationId)
+                                        .collection("CommentOfLocation").doc(commentKey)
+                                        .set(commentObj)
+
+                Promise.all([addToFirebaseReatime, addToFirestore])
                 .then(()=>{
                     resolve()
                 })
@@ -50,10 +62,6 @@ function addComment(locationId, userId, comment, listImage){
                     reject(reason)
                 })
             })
-            .catch((reason) => {
-                reject(reason)
-            })
-        })
     }
     catch(err){
         throw err 

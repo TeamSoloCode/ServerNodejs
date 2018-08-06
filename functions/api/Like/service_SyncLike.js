@@ -14,12 +14,13 @@ function syncLikeCount(locationId, commentId){
         let commentRef = db.collection('Comment').doc(locationId)
                             .collection("CommentOfLocation").doc(commentId)
         
-        let likeRef = db.collection("Like").doc(locationId).collection("LikeOfLocation").doc(commentId)
+        let likeRef = db.collection("Like").doc(locationId).collection("LikeOfComment").doc(commentId)
                         .collection("UsersLiked")
 
-        likeRef.where('deleteFlag', '==', 1).get().then((snapshot)=>{
+        likeRef.where('deleteFlag', '==', 1).get()
+        .then((snapshot)=>{
             commentRef.update({
-                like:  snapshot.size() + 1
+                like:  snapshot.docs.length + 1
             })
         })
     }
