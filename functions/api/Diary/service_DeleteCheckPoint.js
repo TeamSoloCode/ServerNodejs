@@ -11,11 +11,20 @@ module.exports = {
 function deleteCheckPoint(userId, diaryId, checkPointId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection('Diary').doc(userId).collection('CheckPoint').doc(diaryId)
-                                                .collection('Points').doc(checkPointId)
-            .delete()
+            db.collection('MyDiary').doc(userId)
+            .collection('AllMyDiary').doc(diaryId).get()
+            .then((result)=>{
+                if(typeof result != 'undefined'){
+                    return db.collection('Diary').doc(diaryId)
+                            .collection('CheckPoint').doc(checkPointId)
+                            .update({deleteFlag : true}, { merge: true })
+                }
+                else{
+                    reject("You're not the owner of this diary")
+                }
+            })
             .then(()=>{
-                resolve()
+                resolve(1)
             })
             .catch((reason)=>{
                 reject(reason)

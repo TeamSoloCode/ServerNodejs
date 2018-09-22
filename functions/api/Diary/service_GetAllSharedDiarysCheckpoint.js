@@ -3,36 +3,31 @@ admin.app()
 let db = admin.firestore()
 
 module.exports = {
-    getAllCheckPoint: (userId, diaryId)=>{
-        return getAllCheckPoint(userId, diaryId)
+    getAllMySharedDiarysCheckPoint: (userSharedId, diaryId)=>{
+        return getAllMySharedDiarysCheckPoint(userSharedId, diaryId)
     }
 }
 
-function getAllCheckPoint(userId, diaryId){
+function getAllMySharedDiarysCheckPoint(userSharedId, diaryId){
     try{
         return new Promise((resolve, reject)=>{
-
-            db.collection('MyDiary').doc(userId)
-                .collection('AllMyDiary').doc(diaryId).get()
-                .then((snapShot)=>{
-                    if(typeof snapShot.data() != 'undefined'){
+            db.collection('SharedDiary').doc(userSharedId)
+                .collection('AllMySharedDiary').doc(diaryId).get()
+                .then((sharedChecker)=>{
+                    if(typeof sharedChecker.data().shared != 'undefined' || sharedChecker.data().shared != false){
                         return  db.collection('Diary').doc(diaryId)
                                     .collection('CheckPoint')
                                     .where("deleteFlag",'==',false).get()
                     }
                     else{
-                        reject("You're not the owner of this diary")
+                        reject("This diary is no longer shared")
                     }
                 })
                 .then((result)=>{
                     let count = 0;
                     let len = result.docs.length
                     let listCheckPoint = []
-
-                    if(result.docs.length == 0){
-                        resolve(listCheckPoint)
-                    }
-
+                    
                     result.forEach( childSnap =>{
                         let checkPoint = childSnap.data()
                         checkPoint.id = childSnap.id

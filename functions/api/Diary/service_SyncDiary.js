@@ -3,26 +3,30 @@ admin.app()
 let db = admin.firestore()
 
 module.exports = {
-    syncCheckPointDescription: (userId, diaryId, checkPointId)=>{
-        return syncCheckPointDescription(userId, diaryId, checkPointId)
+    syncAddCheckPoint: (userId, diaryId, checkPointId)=>{
+        return syncAddCheckPoint(userId, diaryId, checkPointId)
     },
     syncUpdateDistance: (userId, diaryId)=>{
         return syncUpdateDistance(userId, diaryId)
     }
 }
 
-function syncCheckPointDescription(userId, diaryId, checkPointId){
+function syncAddCheckPoint(diaryId){
     try{
         return new Promise((resolve, reject)=>{
-            db.collection('Diary').doc(userId).collection('Description').doc(diaryId)
-                    .collection('CheckPointDescription').doc(checkPointId)
-            .set({})
-            .then(()=>{
-               resolve()
-            })
-            .catch((reason)=>{
-                reject(reason)
-            })
+
+            db.collection('Diary').doc(diaryId)
+                .collection('CheckPoint').where('deleteFlag', '==', false).get()
+                .then((snapShot)=>{
+                    return  db.collection('Diary').doc(diaryId)
+                                .update({checkPoint: snapShot.docs.length + 1}, { merge: true })
+                })
+                .then(()=>{
+                resolve()
+                })
+                .catch((reason)=>{
+                    reject(reason)
+                })
         })
     }
     catch(err){

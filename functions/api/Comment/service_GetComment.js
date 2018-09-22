@@ -24,17 +24,26 @@ function getAllCommentOfLocation(locationId, userIdGetComment, commentId){
                     .collection('CommentOfLocation').doc(commentId).get()
                     .then((snap) => {
                         let listComment = []
+                        if(typeof snap.data() != 'undefined'){
         
-                        //anh xa object comment
-                        let comment = snap.data()
-                        //set comment id
-                        comment.commentId = snap.id
-    
-                        parseToComment(comment, userIdGetComment, locationId)
-                        .then((commentSnapshot)=>{
-                            listComment.push(commentSnapshot)
+                            //anh xa object comment
+                            let comment = snap.data()
+                            //set comment id
+                            comment.commentId = snap.id
+        
+                            parseToComment(comment, userIdGetComment, locationId)
+                            .then((commentSnapshot)=>{
+
+                                delete commentSnapshot.userId
+                                delete commentSnapshot.deleteFlag
+
+                                listComment.push(commentSnapshot)
+                                resolve(listComment)
+                            })
+                        }
+                        else{
                             resolve(listComment)
-                        })
+                        }
                     })
                     .catch((reason)=>{
                         reject(reason)
@@ -44,25 +53,31 @@ function getAllCommentOfLocation(locationId, userIdGetComment, commentId){
                 db.collection('Comment').doc(locationId)
                             .collection('CommentOfLocation').where("deleteFlag", '==', 0).get()
                 .then((snap) => {
-                    let count = 0
                     let length = snap.docs.length
                     let listComment = []
-    
-                    snap.forEach( childSnap =>{
-                        //anh xa object comment
-                        let comment = childSnap.data()
-    
-                        //set comment id
-                        comment.commentId = childSnap.id
-                        parseToComment(comment, userIdGetComment, locationId)
-                        .then((commentSnapshot)=>{
-                            listComment.push(commentSnapshot)
-                            count++
-                            if(count == length){
-                                resolve(listComment)
-                            }
+                    if(length > 0){
+                        let count = 0
+                        snap.forEach( childSnap =>{
+                            //anh xa object comment
+                            let comment = childSnap.data()
+        
+                            //set comment id
+                            comment.commentId = childSnap.id
+                            parseToComment(comment, userIdGetComment, locationId)
+                            .then((commentSnapshot)=>{
+                                delete commentSnapshot.userId
+                                delete commentSnapshot.deleteFlag
+
+                                listComment.push(commentSnapshot)
+                                count++
+                                if(count == length){
+                                    resolve(listComment)
+                                }
+                            })
                         })
-                    })
+                    }else{
+                        resolve(listComment)
+                    }
                 })
                 .catch((reason)=>{
                     reject(reason)
@@ -85,10 +100,6 @@ function parseToComment(comment, userIdGetComment, locationId){
     
             Promise.all([promiseGetUsersCommentInfo, promiseLikeCheck])
             .then((values)=>{
-                delete comment.userId
-                delete comment.deleteFlag
-    
-    
                 if(typeof values[1].data() != 'undefined'){
                     if(values[1].data().deleteFlag == 0){
                         comment.liked = true
@@ -114,11 +125,10 @@ function parseToComment(comment, userIdGetComment, locationId){
                 resolve(comment)
             })
             .catch((reason)=>{
-                console.log(reason)
                 comment.liked = false
                 comment.userName =  "Can't not get user image"
                 comment.userImage = "Can't not get user image"
-    
+                //console.log(comment)
                 resolve(comment)
             })
         })

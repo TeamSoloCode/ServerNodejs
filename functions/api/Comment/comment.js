@@ -59,14 +59,14 @@ router.post('/GetAllCommentOfLocation', (req, res)=>{
         let commentId = req.body.commentId
         serviceGetComment.getAllCommentOfLocation(locationId, userIdGetComment, commentId)
         .then((result)=>{
-            res.send({resultCode: 1, resultData: result})
+            res.send(responseType(Constant.resultCode.OK, result))
         })
         .catch((reason)=>{
-            res.send({resultCode: 0, resultData: reason.toString()})
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
         })
     }
     catch(err){
-        res.send({resultCode: -1, resultData: err.toString()})
+        res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
     }
 })
 

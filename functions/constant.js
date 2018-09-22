@@ -19,6 +19,10 @@ let resultCode = {
     },
     sos:{
         HAVE_TO_WAIT: 311
+    },
+    diary:{
+        ADD_CHECKPOINT_FAIL: 411,
+        SHARE_FAIL: 412
     }
 }
 let common = {
@@ -86,10 +90,15 @@ let diary = {
         SUCCESSFUL: "Create diary successful!!!"
     },
     addCheckPoint:{
-        SUCCESSFUL: "Add check point successful!!!"
+        SUCCESSFUL: "Add check point successful!!!",
+        FAIL: "Add check point failure!!!"
     },
     update:{
         SUCCESSFUL: "Update check point successful!!!"
+    },
+    shared:{
+        SUCCESSFUL: "Share diary successful!!!",
+        CAN_NOT_SHARED_TO_YOURSEFT:"Can't not shared to yourseft !!!"
     }
 }
 

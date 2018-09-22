@@ -12,32 +12,38 @@ let db = admin.firestore()
 function getAllMyDiary(userId){
     try{
         return new Promise((resolved, reject)=>{
-            db.collection("Diary").doc(userId).collection("AllMyDiary")
-            .where("deleteFlag", "==", 0).get()
-            .then((diarySnapshot)=>{
-                let length = diarySnapshot.docs.length
-                let count = 0
-                let listDiary = []
 
-                if(diarySnapshot.docs.length == 0){
-                    resolved(listDiary)
-                }
+            db.collection('MyDiary').doc(userId)
+                .collection('AllMyDiary').where('deleteFlag', '==', 0).get()
+                .then((diarySnapshot)=>{
 
-                diarySnapshot.forEach( cSnap =>{
-                    let diary = cSnap.data()
-                    diary.id = cSnap.id
+                    let length = diarySnapshot.docs.length
+                    let count = 0
+                    let listDiary = []
 
-                    listDiary.push(diary)
-                    count++
-                    if(count == length){
-                        resolved(listDiary)
+                    if(length == 0){
+                        resolved()
                     }
+
+                    diarySnapshot.forEach((cSnap)=>{
+                        let diaryId = cSnap.id
+                        db.collection('Diary').doc(diaryId).get()
+                        .then((snap)=>{
+                            let diary = snap.data()
+                            diary.id = diaryId
+                            
+                            listDiary.push(diary)
+                            count++
+                            if(count == length){
+                                resolved(listDiary)
+                            }
+                        })
+                    })
+                })
+                .catch((reason)=>{
+                    reject(reason)
                 })
             })
-            .catch((reason)=>{
-                reject(reason)
-            })
-        })
     }
     catch(err){
         throw err

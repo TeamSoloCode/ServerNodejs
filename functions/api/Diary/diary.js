@@ -14,11 +14,17 @@ let serviceUpdateProfile = require('./service_UpdateProfileDiary')
 let serviceGetAllMyDiary = require('./service_GetAllDiary')
 let serviceGetCheckPoint = require('./service_GetCheckPoint')
 let serviceGetAllCheckPoint = require('./service_GetAllCheckPoint')
+let serviceShareDiary = require('./service_ShareMyDiary')
+let serviceGetAllMySharedCheckPoint = require('./service_GetAllSharedDiarysCheckpoint')
+let serviceGetAllMyShared = require('./service_GetMySharedDiary')
 
 router.post('/CreateDiary', (req, res)=>{
     try{
         let userId = req.body.userId
-        serviceCreateDiary.createDiary(userId)
+        let diarysName = req.body.diarysName
+        let diarysImage = req.body.diarysImage
+        
+        serviceCreateDiary.createDiary(userId, diarysName, diarysImage)
         .then(()=>{
             res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.diary.createDiary.SUCCESSFUL))
         })
@@ -190,4 +196,71 @@ router.post('/GetAllCheckPoint', (req, res)=>{
     }
 })
 
+router.post('/ShareMyDiary', (req, res)=>{
+    try{
+        let userId = req.body.userId
+        let diaryId = req.body.diaryId
+        let userSharedEmail = req.body.userSharedEmail
+
+        serviceShareDiary.shareDiary(userId, userSharedEmail, diaryId)
+        .then((result)=>{
+            if(result == 1){
+                res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.diary.shared.SUCCESSFUL))
+            }
+            else if(result == 0){
+                res.send(responseType(Constant.resultCode.diary.SHARE_FAIL, Constant.diary.shared.CAN_NOT_SHARED_TO_YOURSEFT))
+            }
+            else{
+                res.send(responseType(Constant.resultCode.diary.SHARE_FAIL, Constant.team.checkEmail.EMAIL_DOES_NOT_EXIST))
+            }
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/GetAllMySharedDiarysCheckPoint', (req, res)=>{
+    try{
+        let userSharedId = req.body.userSharedId
+        let diaryId = req.body.diaryId
+
+        serviceGetAllMySharedCheckPoint.getAllMySharedDiarysCheckPoint(userSharedId, diaryId)
+        .then((result)=>{
+            res.send(responseType(Constant.resultCode.OK, result))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
+
+router.post('/GetAllMySharedDiary', (req, res)=>{
+    try{
+        let userSharedId = req.body.userSharedId
+
+        serviceGetAllMyShared.getAllMySharedDiary(userSharedId)
+        .then((result)=>{
+            res.send(responseType(Constant.resultCode.OK, result))
+        })
+        .catch((reason)=>{
+            console.log(reason.toString())
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, reason.toString()))
+        })
+    }
+    catch(err){
+        console.log(err.toString())
+        res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
+    }
+})
 module.exports = router

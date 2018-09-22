@@ -2,18 +2,29 @@ let admin = require('firebase-admin')
 admin.app()
 
 module.exports = {
-    isUser: (userId) =>{
-       return isUser(userId)
+    isUser: (userShareId,userSharedEmail) =>{
+       return isUser(userShareId, userSharedEmail)
     }
 }
 
-function isUser(userId){
+function isUser(userShareId,userSharedEmail){
     try{
         return new Promise((resolve, reject)=>{
-            admin.auth().getUserByEmail(userId)
+
+            admin.auth().getUserByEmail(userSharedEmail)
             .then(function(userRecord) {
                if(userRecord.email != null || typeof userRecord.email != 'undefined'){
-                    resolve(1)
+                    if(userRecord.uid == userShareId){
+                        resolve(-1)
+                    }
+                    else{
+
+                        admin.auth().getUser(userShareId)
+                        .then((userInfo)=>{
+                            resolve({sharedBy: userInfo.email, userShareId: userRecord.uid})
+                        })
+
+                    }  
                }
                else{
                    resolve(0)

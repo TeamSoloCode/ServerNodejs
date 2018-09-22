@@ -3,21 +3,21 @@ admin.app()
 
 
 module.exports = {
-    createDiary: (userId)=>{
-        return createDiary(userId)
+    createDiary: (userId, diarysName, diarysImage)=>{
+        return createDiary(userId, diarysName, diarysImage)
     }
 }
 
 let db = admin.firestore()
 
-function createDiary(userId){
+function createDiary(userId, diarysName, diarysImage){
     try{
         return new Promise((resolve, reject)=>{
             let diarysNewKey = db.collection('Diary').doc().id
             let diaryProfile = {
-                name: 'My new diary',
+                name: diarysName,
                 description: '',
-                image:'',
+                image: diarysImage,
                 createDate: new Date().getTime(),
                 endDate: '',
                 updateDate: '',
@@ -26,12 +26,16 @@ function createDiary(userId){
                 deleteFlag: 0
             }
             
-            db.collection('Diary').doc(userId).collection('AllMyDiary').doc(diarysNewKey).set(diaryProfile)
+            db.collection('Diary').doc(diarysNewKey).set(diaryProfile)
             .then(()=>{
-               resolve()
+                return db.collection('MyDiary').doc(userId)
+                        .collection('AllMyDiary').doc(diarysNewKey)
+                        .set({deleteFlag: 0})
+            })
+            .then(()=>{
+                resolve()
             })
             .catch((reason)=>{
-                
                 reject(reason)
             })
         })
