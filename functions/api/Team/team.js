@@ -19,9 +19,9 @@ let serviceRemoveMember = require('./service_RemoveMember')
 
 router.post("/CreateTeam",(req, res)=>{
     try{
-        let userId = req.body.userId
-        let teamsName = req.body.teamsName
-        serviceCreateTeam.createTeam(userId, teamsName)
+        const userEmail = req.body.userEmail
+        const teamsName = req.body.teamName
+        serviceCreateTeam.createTeam(userEmail, teamsName)
         .then((result)=>{
             if(result == 1){
                 res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.createTeam.success.CREATE_TEAM))
@@ -36,7 +36,7 @@ router.post("/CreateTeam",(req, res)=>{
         })
     }
     catch(err){
-        console.log(err.toString())
+        console.log(err)
         res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
     }
 })
@@ -206,9 +206,9 @@ router.post('/DeleteTeam', (req, res)=>{
 
 router.post('/GetAllMember', (req, res)=>{
     try{
-        let userId = req.body.userId
+        let userEmail = req.body.userEmail
         let teamId = req.body.teamId
-        serviceGetAllMember.getAllMember(userId, teamId)
+        serviceGetAllMember.getAllMember(userEmail, teamId)
         .then((result)=>{
             if(result == -1){
                 res.send(responseType(Constant.resultCode.team.NOT_MEMBER, Constant.team.notMember))

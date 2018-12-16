@@ -1,49 +1,59 @@
 let firebase = require('firebase')
 firebase.app()
 
-let syncTeamModule = require('./service_SyncTeamModule')
-let hasTeam = require('./service_HasTeam')
+const syncTeamModule = require('./service_SyncTeamModule')
+const hasTeam = require('./service_HasTeam')
+const getUserId = require('./service_GetUserByEmail')
 
 module.exports = {
-    createTeam: (userId,teamsName) =>{
-        return createTeam(userId, teamsName)
+    createTeam: (userEmail, teamsName) =>{
+        return createTeam(userEmail, teamsName)
     }
 }
 //database realtime reference
-let firebaseRef = firebase.database().ref()
+const firebaseRef = firebase.database().ref()
 
-function createTeam(userId, teamsName){
+function createTeam(userEmail, teamsName){
     try{
+        let userId = null
+        // Get a key for new Team.
+        const newTeamKey = firebaseRef.push().key;
+
         return new Promise((resolve, reject) => {
-            //kiểm tra user có đội hay chưa
-            hasTeam.hasTeam(userId).then((result)=>{
+            //get userId by email
+            getUserId.getUserByEmail(userEmail)
+            .then((Id)=>{
+                userId = Id
+                //kiểm tra user có đội hay chưa
+                return hasTeam.hasTeam(userId)
+            })
+            .then((result)=>{
                 if(result == false){
-                    // Get a key for a new Team.
-                    let newTeamKey = firebaseRef.push().key;
                     let createTeam = {};
                     createTeam['/Leader/' + newTeamKey] = {
                         leader: userId
                     };
 
                     //create new team reference
-                    firebaseRef.update(createTeam)
-                    .then(()=>{
-                        syncTeamModule.syncCreateTeam(userId, newTeamKey, teamsName)
-                        .then(()=>{
-                            resolve(1)
-                        })
-                        .catch((reason)=>{
-                            reject(reason)
-                        })
-                    })
-                    .catch((reason)=>{
-                        reject(reason)
-                    });
+                    return firebaseRef.update(createTeam)
                 }
                 else{
                     resolve(0)
+                    return 0
                 }
             })
+            .then((result)=>{
+                //nếu chưa có team thì chạy syncCreateTeam
+                if (result != 0){
+                    return syncTeamModule.syncCreateTeam(userId, newTeamKey, teamsName)
+                }
+            })
+            .then(()=>{
+                resolve(1)
+            })
+            .catch((reason)=>{
+                reject(reason)
+            });
         })
     }
     catch(err){

@@ -1,53 +1,58 @@
 let firebase = require('firebase')
 firebase.app()
 
-let admin = require('firebase-admin')
+const admin = require('firebase-admin')
 admin.app()
 
+const getUserId = require('./service_GetUserByEmail')
+
 module.exports = {
-    getAllMember: (userId, teamId) => {
-        return getAllMember(userId, teamId)
+    getAllMember: (userEmail, teamId) => {
+        return getAllMember(userEmail, teamId)
     }
 }
 //database realtime reference
 let firebaseRef = firebase.database().ref()
 
-function getAllMember(userId, teamId){
+function getAllMember(userEmail, teamId){
     try{
+        let memberList = []
+        let promisesList = []
+
         return new Promise((resolve, reject)=>{
-            firebaseRef.child(`HasTeam/${userId}`).once('value')
+            getUserId.getUserByEmail(userEmail)
+            .then((userId)=> {
+                return firebaseRef.child(`HasTeam/${userId}`).once('value')
+            })
             .then((snapHasTeam)=>{
                 if(snapHasTeam.val() == teamId){
-                    let memberList = []
-                    let counter = 0
-                    firebaseRef.child(`Team/${teamId}`).once('value')
-                    .then((snapTeam)=>{
-                        let memberCounter = snapTeam.numChildren()
-                        snapTeam.forEach( snapChild =>{
-                            admin.auth().getUser(snapChild.key)
-                            .then(memberInfor =>{
-                                let member = {
-                                    id: snapChild.key,
-                                    name: memberInfor.displayName,
-                                    phone: memberInfor.phoneNumber,
-                                    image: memberInfor.photoURL,
-                                    email: memberInfor.email
-                                }
-                                memberList.push(member)
-                                counter++
-                                if(counter == memberCounter){
-                                    resolve(memberList)
-                                }
-                            })
-                        })
-                    })
-                    .catch((reason)=>{
-                        reject(reason)
-                    })
+                    return firebaseRef.child(`Team/${teamId}`).once('value')
                 }
                 else{
                     resolve(-1)
                 }
+            })
+            .then((snapTeam)=>{
+                snapTeam.forEach( snapChild =>{
+                    const promise = admin.auth().getUser(snapChild.key)
+                    promisesList.push(promise)
+                })
+
+                return Promise.all(promisesList)
+            })
+            .then((memberInforList)=>{
+                memberInforList.map((memberInfor)=>{
+                    let member = {
+                        id: snapChild.key,
+                        name: memberInfor.displayName,
+                        phone: memberInfor.phoneNumber,
+                        image: memberInfor.photoURL,
+                        email: memberInfor.email
+                    }
+                    memberList.push(member)
+                })
+
+                resolve(memberList)
             })
             .catch((reason)=>{
                 reject(reason)

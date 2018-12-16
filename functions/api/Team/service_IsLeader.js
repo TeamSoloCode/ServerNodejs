@@ -25,7 +25,7 @@ function isLeader(teamId, userId){
                         resolve(leaderId)
                     }
                     else{
-                        resolve(false)
+                        resolve(leaderId)
                     }
                 }
             })

@@ -57,5 +57,5 @@ let like = require('./api/Like/likeRoute')
 
 app.use('/api', [touristLocation, rating, userHobby, comment, team, diary, userProfile, sos, like]);
 
-//app.listen(3000);
-exports.app = functions.https.onRequest(app);
+app.listen(3000);
+//exports.app = functions.https.onRequest(app);

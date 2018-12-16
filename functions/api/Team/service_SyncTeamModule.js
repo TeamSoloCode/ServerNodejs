@@ -19,55 +19,36 @@ let firebaseRef = firebase.database().ref()
 function syncCreateTeam(userId, teamId, teamsName){
     try{
         return new Promise((resolve, reject)=>{
-            let syncHasTeam = new Promise((resolve1, reject1)=>{
+            //sync set user has team
+            const syncHasTeam = () => {
                 let hasTeam = {};
                 hasTeam['/HasTeam/' + userId] = teamId
-                //sync set user has team
-                firebaseRef.update(hasTeam)
-                .then(()=>{
-                    resolve1()
-                })
-                .catch((reason)=>{
-                    reject1(reason)
-                });
-            })
+                return firebaseRef.update(hasTeam)
+            }
 
-            let syncCreateTeam = new Promise((resolve1, reject1)=>{
+            //sync user location
+            const syncCreateTeam = () => {
                 let userLocation = {};
                 userLocation[`Team/${teamId}/${userId}`] = {
                     log: 999,
                     lat: 999
                 }
 
-                //sync set user has team
-                firebaseRef.update(userLocation)
-                .then(()=>{
-                    resolve1()
-                })
-                .catch((reason)=>{
-                    reject1(reason)
-                });
-            })
-
-            let syncTeamProfile = new Promise((resolve1, reject1)=>{
-                //create teams profile
-                firebase.database().ref(`TeamProfile/${teamId}`).set({
+                return firebaseRef.update(userLocation)
+            } 
+            //create teams profile
+            const syncTeamProfile = () => {
+                return firebase.database().ref(`TeamProfile/${teamId}`).set({
                     teamsName: teamsName,
                     createdDate: firebase.database.ServerValue.TIMESTAMP,
                     createdBy: userId,
                     member: 1,
                     leader: userId
                 })
-                .then(()=>{
-                    resolve1()
-                })
-                .catch((reason)=>{
-                    reject1(reason)
-                })
-            })
+            }
 
             //run all sync object
-            Promise.all([syncHasTeam, syncCreateTeam, syncTeamProfile]).then(
+            Promise.all([syncHasTeam(), syncCreateTeam(), syncTeamProfile()]).then(
                 ()=>{
                     resolve()
                 },
@@ -94,7 +75,7 @@ function syncJoinTeam(userId, teamId){
                 hasTeam['/HasTeam/' + userId] = teamId
                 //sync set user has team
                 firebaseRef.update(hasTeam)
-                .then(()=>{
+                .then(() => {
                     resolve1(1)
                 })
                 .catch((reason)=>{
