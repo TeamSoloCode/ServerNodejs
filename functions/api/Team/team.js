@@ -43,10 +43,10 @@ router.post("/CreateTeam",(req, res)=>{
 
 router.post("/InviteMember",(req, res)=>{
     try{
-        let userId = req.body.userId
-        let userInvitedEmail = req.body.userInvitedEmail
-        let teamId = req.body.teamId
-        serviceInviteMember.inviteMember(teamId, userId, userInvitedEmail)
+        const userEmail = req.body.userEmail
+        const userInvitedEmail = req.body.userInvitedEmail
+        const teamId = req.body.teamId
+        serviceInviteMember.inviteMember(teamId, userEmail, userInvitedEmail)
         .then((result)=>{
             if(result == 1){
                 res.send(responseType(Constant.resultCode.SUCCESSFUL, Constant.team.inviteMember.success.INVITATION))

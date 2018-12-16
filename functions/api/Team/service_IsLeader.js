@@ -16,7 +16,6 @@ function isLeader(teamId, userId){
             firebaseRef.child('Leader').child(teamId)
             .once('value',(snap)=>{
                 let leaderId = snap.val().leader
-                console.log(leaderId)
                 if(leaderId == null || typeof leaderId == 'undefined'){
                     resolve(false)
                 }

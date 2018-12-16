@@ -20,7 +20,7 @@ function getUserByEmail(userEmail){
                 }
             })
             .catch(function(error) {
-                reject(error.toString())
+                resolve(null)
             });
         })
     }

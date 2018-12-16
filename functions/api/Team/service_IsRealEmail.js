@@ -12,6 +12,7 @@ function isRealEmail(userId, userInvitedEmail){
         return new Promise((resolve, reject)=>{
             admin.auth().getUserByEmail(userInvitedEmail)
             .then(function(userRecord) {
+                console.log('1')
                 if(userRecord.uid == userId){
                     resolve(0)
                 }
@@ -20,7 +21,7 @@ function isRealEmail(userId, userInvitedEmail){
                 } 
             })
             .catch(function(error) {
-                reject(error.toString())
+                resolve(null)
             });
         })
     }
