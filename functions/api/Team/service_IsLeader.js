@@ -15,16 +15,15 @@ function isLeader(teamId, userId){
             //kiểm tra người mời có phải là leader của team hay không
             firebaseRef.child('Leader').child(teamId)
             .once('value',(snap)=>{
-                let leaderId = snap.val().leader
-                if(leaderId == null || typeof leaderId == 'undefined'){
+                if(snap.val() == null || typeof snap.val() == 'undefined'){
                     resolve(false)
                 }
                 else{
-                    if(snap.val().leader === userId){
-                        resolve(leaderId)
-                    }
-                    else{
-                        resolve(leaderId)
+                    const leaderId = snap.val().leader
+                    if(leaderId == userId){
+                        resolve(snap.val().leader)
+                    }else{
+                        resolve(false)
                     }
                 }
             })

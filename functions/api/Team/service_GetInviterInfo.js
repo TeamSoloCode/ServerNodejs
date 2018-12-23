@@ -1,53 +1,57 @@
-let firebase = require('firebase')
+const firebase = require('firebase')
 firebase.app()
 
-let admin = require('firebase-admin')
+const admin = require('firebase-admin')
 admin.app()
 
-let serviceHasTeam = require('./service_HasTeam')
-let serviceGetTeamProfile = require('./service_TeamsProfile')
+const serviceHasTeam = require('./service_HasTeam')
+const serviceGetTeamProfile = require('./service_TeamsProfile')
+const serviceGetUserByEmail =  require('./service_GetUserByEmail')
+
 module.exports = {
-    getInviterInfo: (userId) =>{
-        return getInviterInfo(userId)
+    getInviterInfo: (userEmail) =>{
+        return getInviterInfo(userEmail)
     }
 }
 //database realtime reference
 let firebaseRef = firebase.database().ref()
 
-function getInviterInfo(userId){
+function getInviterInfo(userEmail){
     try{
         return new Promise((resolve, reject)=>{
             let listInvites = []
-            firebaseRef.child('Invitation').child(userId)
-            .once('value',(snap)=>{
-                let len = snap.numChildren()
-                let count = 0
+            let promiseList = []
+            serviceGetUserByEmail.getUserByEmail(userEmail)
+            .then((userId)=>{
+                return firebaseRef.child('Invitation').child(userId).once('value')
+            })
+            .then((snap) => {
                 snap.forEach( childSnap => {
-                    let inviterId = childSnap.val().leader
-                    let promiseGetInviterName = admin.auth().getUser(inviterId)
-                    let promiseGetInviterTeamId = serviceHasTeam.hasTeam(inviterId)
-                    let promiseGetTeamsName = serviceGetTeamProfile.getTeamsProfile(inviterId)
+                    const inviterId = childSnap.val().leader
+                    const promiseGetInviterName = admin.auth().getUser(inviterId)
+                    const promiseGetInviterTeamId = serviceHasTeam.hasTeam(inviterId)
+                    const promiseGetTeamsName = serviceGetTeamProfile.getTeamsProfile(inviterId)
 
-                    Promise.all([promiseGetInviterName, promiseGetInviterTeamId, promiseGetTeamsName])
-                    .then((values)=>{
-                            listInvites.push({
-                                teamsName: values[2].val().teamsName,
-                                invitersName: values[0].displayName,
-                                invitersEmail: values[0].email,
-                                invitersPhotoURL: values[0].photoURL,
-                                teamId: values[1],
-                                checked: childSnap.val().checked
-                            })
-                            count++
-                            if(len == count){
-                                resolve(listInvites)
-                            }
-                        },
-                        (reason)=>{
-                            reject(reason)
-                        })
+                    promiseList.push(Promise.all([  promiseGetInviterName,
+                                                    promiseGetInviterTeamId,
+                                                    promiseGetTeamsName,
+                                                    {checked: childSnap.val().checked}])                                                    )
                 })
-               
+                return Promise.all(promiseList)
+            })
+            .then((results)=>{
+                results.forEach( result => {
+                    listInvites.push({
+                        teamsName: result[2].val().teamsName,
+                        invitersName: result[0].displayName,
+                        invitersEmail: result[0].email,
+                        invitersPhotoURL: result[0].photoURL,
+                        teamId: result[1],
+                        checked: result[3].checked
+                    })
+                })
+
+                resolve(listInvites)
             })
             .catch((reason)=>{
                 reject(reason)

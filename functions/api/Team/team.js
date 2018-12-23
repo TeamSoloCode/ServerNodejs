@@ -54,9 +54,6 @@ router.post("/InviteMember",(req, res)=>{
             else if(result == 2){
                 res.send(responseType(Constant.resultCode.team.EMAIL_DOES_NOT_EXIST, Constant.team.checkEmail.EMAIL_DOES_NOT_EXIST))
             }
-            else if(result == 3){
-                res.send(responseType(Constant.resultCode.team.CAN_NOT_INVITE_YOURSEFT, Constant.team.canNotInviteYourseft.CAN_NOT_INVITE_YOURSEFT))
-            }
             else if(result == 0){
                 res.send(responseType(Constant.resultCode.team.NOT_LEADER, Constant.team.notLeader.NOT_LEADER))
             }
@@ -121,18 +118,18 @@ router.post('/IsLeader', (req, res)=>{
 
 router.post('/GetInviterInfo', (req, res)=>{
     try{
-        let userId = req.body.userId
-        serviceGetInviterInfo.getInviterInfo(userId)
+        let userEmail = req.body.userEmail
+        serviceGetInviterInfo.getInviterInfo(userEmail)
         .then((result)=>{
             res.send(responseType(Constant.resultCode.OK, result))
         })
         .catch((reason)=>{
             console.log(reason.toString())
-            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.team.joinTeam.fail.JOIN_TEAM))
+            res.send(responseType(Constant.resultCode.DATABASE_EXCEPTION, Constant.common.TRY_AGAIN))
         })
     }
     catch(err){
-        console.log(err.toString())
+        console.log(err)
         res.send(responseType(Constant.resultCode.EXCEPTION, err.toString()))
     }
 })

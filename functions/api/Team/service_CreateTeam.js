@@ -33,12 +33,10 @@ function createTeam(userEmail, teamsName){
                     createTeam['/Leader/' + newTeamKey] = {
                         leader: userId
                     };
-
                     //create new team reference
                     return firebaseRef.update(createTeam)
                 }
                 else{
-                    resolve(0)
                     return 0
                 }
             })
@@ -47,8 +45,12 @@ function createTeam(userEmail, teamsName){
                 if (result != 0){
                     return syncTeamModule.syncCreateTeam(userId, newTeamKey, teamsName)
                 }
+                return 0
             })
-            .then(()=>{
+            .then((result)=>{
+                if(result == 0 ){
+                    resolve(0)
+                }
                 resolve(1)
             })
             .catch((reason)=>{
